@@ -1,0 +1,941 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* wb_portal
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-01 00:00+0000\n"
+"PO-Revision-Date: 2026-08-01 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: wb_portal
+msgid "%s days ago"
+msgstr "%s दिन पहले"
+
+#: wb_portal
+msgid "%s hours ago"
+msgstr "%s घंटे पहले"
+
+#: wb_portal
+msgid "%s minutes ago"
+msgstr "%s मिनट पहले"
+
+#: wb_portal
+msgid "(verified)"
+msgstr "(सत्यापित)"
+
+#: wb_portal
+msgid "A new time off request was submitted by %s."
+msgstr "%s ने नया अवकाश आवेदन जमा किया है।"
+
+#: wb_portal
+msgid "Absent"
+msgstr "अनुपस्थित"
+
+#: wb_portal
+msgid "Action"
+msgstr "कार्रवाई"
+
+#: wb_portal
+msgid "Actions"
+msgstr "कार्रवाइयाँ"
+
+#: wb_portal
+msgid "All Leaves"
+msgstr "सभी अवकाश"
+
+#: wb_portal
+msgid "All Tickets"
+msgstr "सभी टिकट"
+
+#: wb_portal
+msgid "All Time Off"
+msgstr "सभी अवकाश"
+
+#: wb_portal
+msgid "All Time Off Requests"
+msgstr "सभी अवकाश आवेदन"
+
+#: wb_portal
+msgid "All statuses"
+msgstr "सभी स्थितियाँ"
+
+#: wb_portal
+msgid "Amount"
+msgstr "राशि"
+
+#: wb_portal
+msgid "Announcements"
+msgstr "घोषणाएं"
+
+#: wb_portal
+msgid "Apply"
+msgstr "आवेदन करें"
+
+#: wb_portal
+msgid "Apply Time Off"
+msgstr "अवकाश आवेदन"
+
+#: wb_portal
+msgid "Apply for Time Off"
+msgstr "अवकाश के लिए आवेदन करें"
+
+#: wb_portal
+msgid "Apply for a Loan"
+msgstr "ऋण के लिए आवेदन करें"
+
+#: wb_portal
+msgid "Approval"
+msgstr "अनुमोदन"
+
+#: wb_portal
+msgid "Approval History"
+msgstr "अनुमोदन इतिहास"
+
+#: wb_portal
+msgid "Approve"
+msgstr "स्वीकृत करें"
+
+#: wb_portal
+msgid "Approved"
+msgstr "स्वीकृत"
+
+#: wb_portal
+msgid "Approver"
+msgstr "अनुमोदक"
+
+#: wb_portal
+msgid "Attendance"
+msgstr "उपस्थिति"
+
+#: wb_portal
+msgid "Attendance Details"
+msgstr "उपस्थिति विवरण"
+
+#: wb_portal
+msgid "Attendance Report"
+msgstr "उपस्थिति रिपोर्ट"
+
+#: wb_portal
+msgid "Attendance Status"
+msgstr "उपस्थिति स्थिति"
+
+#: wb_portal
+msgid "Availed:"
+msgstr "उपयोग किया गया:"
+
+#: wb_portal
+msgid "Back to Dashboard"
+msgstr "डैशबोर्ड पर वापस जाएँ"
+
+#: wb_portal
+msgid "Back to Documents"
+msgstr "दस्तावेज़ों पर वापस जाएँ"
+
+#: wb_portal
+msgid "Calendar"
+msgstr "कैलेंडर"
+
+#: wb_portal
+msgid "Cancelled"
+msgstr "रद्द"
+
+#: wb_portal
+msgid "Category"
+msgstr "श्रेणी"
+
+#: wb_portal
+msgid "Check In"
+msgstr "उपस्थिति दर्ज करें"
+
+#: wb_portal
+msgid "Check Out"
+msgstr "उपस्थिति समाप्त करें"
+
+#: wb_portal
+msgid "Checked in"
+msgstr "उपस्थिति दर्ज हो गई"
+
+#: wb_portal
+msgid "Checked in at %s."
+msgstr "%s पर उपस्थिति दर्ज हुई।"
+
+#: wb_portal
+msgid "Checked out. Have a nice day!"
+msgstr "उपस्थिति समाप्त हो गई। आपका दिन शुभ हो!"
+
+#: wb_portal
+msgid "Checking your location…"
+msgstr "आपका स्थान जाँचा जा रहा है…"
+
+#: wb_portal
+msgid "Choose a file"
+msgstr "फ़ाइल चुनें"
+
+#: wb_portal
+msgid "Company Announcements"
+msgstr "कंपनी की घोषणाएं"
+
+#: wb_portal
+msgid "Company Requests"
+msgstr "कंपनी के आवेदन"
+
+#: wb_portal
+msgid "Complaints & Suggestions"
+msgstr "शिकायतें और सुझाव"
+
+#: wb_portal
+msgid "Conversation"
+msgstr "वार्तालाप"
+
+#: wb_portal
+msgid "Created"
+msgstr "निर्मित"
+
+#: wb_portal
+msgid "Dashboard"
+msgstr "डैशबोर्ड"
+
+#: wb_portal
+msgid "Date"
+msgstr "तारीख"
+
+#: wb_portal
+msgid "Date Range"
+msgstr "दिनांक सीमा"
+
+#: wb_portal
+msgid "Days"
+msgstr "दिन"
+
+#: wb_portal
+msgid "Department"
+msgstr "विभाग"
+
+#: wb_portal
+msgid "Description"
+msgstr "विवरण"
+
+#: wb_portal
+msgid "Documents"
+msgstr "दस्तावेज़"
+
+#: wb_portal
+msgid "Download"
+msgstr "डाउनलोड"
+
+#: wb_portal
+msgid "Download PDF"
+msgstr "PDF डाउनलोड"
+
+#: wb_portal
+msgid "Draft"
+msgstr "ड्राफ़्ट"
+
+#: wb_portal
+msgid "Duration"
+msgstr "अवधि"
+
+#: wb_portal
+msgid "Education"
+msgstr "शिक्षा"
+
+#: wb_portal
+msgid "Employee"
+msgstr "कर्मचारी"
+
+#: wb_portal
+msgid "Employee Name"
+msgstr "कर्मचारी का नाम"
+
+#: wb_portal
+msgid "Employee:"
+msgstr "कर्मचारी:"
+
+#: wb_portal
+msgid "Events"
+msgstr "इवेंट"
+
+#: wb_portal
+msgid "Expense History"
+msgstr "व्यय इतिहास"
+
+#: wb_portal
+msgid "Expenses"
+msgstr "व्यय"
+
+#: wb_portal
+msgid "File size should be less than 2 MB."
+msgstr "फ़ाइल का आकार 2 MB से कम होना चाहिए।"
+
+#: wb_portal
+msgid "File too large"
+msgstr "फ़ाइल बहुत बड़ी है"
+
+#: wb_portal
+msgid "Filter"
+msgstr "फ़िल्टर"
+
+#: wb_portal
+msgid "From"
+msgstr "से"
+
+#: wb_portal
+msgid "Gross Wage"
+msgstr "सकल वेतन"
+
+#: wb_portal
+msgid "Hello"
+msgstr "नमस्ते"
+
+#: wb_portal
+msgid "Helpdesk"
+msgstr "हेल्पडेस्क"
+
+#: wb_portal
+msgid "Home"
+msgstr "होम"
+
+#: wb_portal
+msgid "Hours"
+msgstr "घंटे"
+
+#: wb_portal
+msgid "House"
+msgstr "घर"
+
+#: wb_portal
+msgid "Installments"
+msgstr "किस्तें"
+
+#: wb_portal
+msgid "Invalid file extension. Allowed extensions are: %s."
+msgstr "अमान्य फ़ाइल एक्सटेंशन। अनुमत एक्सटेंशन: %s।"
+
+#: wb_portal
+msgid "Invalid file type"
+msgstr "अमान्य फ़ाइल प्रकार"
+
+#: wb_portal
+msgid "Latest News"
+msgstr "ताज़ा समाचार"
+
+#: wb_portal
+msgid "Leave Balances"
+msgstr "अवकाश शेष"
+
+#: wb_portal
+msgid "Leave Code"
+msgstr "अवकाश कोड"
+
+#: wb_portal
+msgid "Leave From"
+msgstr "अवकाश प्रारंभ"
+
+#: wb_portal
+msgid "Leave Request Notification"
+msgstr "अवकाश आवेदन सूचना"
+
+#: wb_portal
+msgid "Leave To"
+msgstr "अवकाश समाप्ति"
+
+#: wb_portal
+msgid "Leave Type"
+msgstr "अवकाश प्रकार"
+
+#: wb_portal
+msgid "Leaves to Approve"
+msgstr "अनुमोदन हेतु अवकाश"
+
+#: wb_portal
+msgid "Loan Amount"
+msgstr "ऋण राशि"
+
+#: wb_portal
+msgid "Loan History"
+msgstr "ऋण इतिहास"
+
+#: wb_portal
+msgid "Loan Type"
+msgstr "ऋण प्रकार"
+
+#: wb_portal
+msgid "Loans"
+msgstr "ऋण"
+
+#: wb_portal
+msgid "Location"
+msgstr "स्थान"
+
+#: wb_portal
+msgid "Location check enabled: %s (allowed radius %.1f km)"
+msgstr "स्थान जाँच सक्षम: %s (अनुमत दायरा %.1f किमी)"
+
+#: wb_portal
+msgid "Mark all read"
+msgstr "सभी पढ़े हुए चिह्नित करें"
+
+#: wb_portal
+msgid "Medical"
+msgstr "चिकित्सा"
+
+#: wb_portal
+msgid "My Account"
+msgstr "मेरा खाता"
+
+#: wb_portal
+msgid "My Attendance"
+msgstr "मेरी उपस्थिति"
+
+#: wb_portal
+msgid "My Documents"
+msgstr "मेरे दस्तावेज़"
+
+#: wb_portal
+msgid "My Expenses"
+msgstr "मेरे व्यय"
+
+#: wb_portal
+msgid "My HR Portal"
+msgstr "मेरा HR पोर्टल"
+
+#: wb_portal
+msgid "My Loans"
+msgstr "मेरे ऋण"
+
+#: wb_portal
+msgid "My Payslips"
+msgstr "मेरी वेतन पर्चियाँ"
+
+#: wb_portal
+msgid "My Planning"
+msgstr "मेरी प्लानिंग"
+
+#: wb_portal
+msgid "My Recent Requests"
+msgstr "मेरे हालिया आवेदन"
+
+#: wb_portal
+msgid "My Requests"
+msgstr "मेरे आवेदन"
+
+#: wb_portal
+msgid "My Tickets"
+msgstr "मेरे टिकट"
+
+#: wb_portal
+msgid "My Time Off"
+msgstr "मेरा अवकाश"
+
+#: wb_portal
+msgid "Name"
+msgstr "नाम"
+
+#: wb_portal
+msgid "Net Wage"
+msgstr "शुद्ध वेतन"
+
+#: wb_portal
+msgid "New Expense"
+msgstr "नया व्यय"
+
+#: wb_portal
+msgid "New Request"
+msgstr "नया आवेदन"
+
+#: wb_portal
+msgid "New Ticket"
+msgstr "नया टिकट"
+
+#: wb_portal
+msgid "New time off request"
+msgstr "नया अवकाश आवेदन"
+
+#: wb_portal
+msgid "News"
+msgstr "समाचार"
+
+#: wb_portal
+msgid "No announcements yet. Check back soon!"
+msgstr "अभी कोई घोषणा नहीं। जल्द देखें!"
+
+#: wb_portal
+msgid "No details or replies on this ticket yet."
+msgstr "इस टिकट पर अभी कोई विवरण या उत्तर नहीं।"
+
+#: wb_portal
+msgid "No documents uploaded yet. Use the upload box above to add your first document."
+msgstr "अभी तक कोई दस्तावेज़ अपलोड नहीं हुआ। पहला दस्तावेज़ जोड़ने के लिए ऊपर बॉक्स का उपयोग करें।"
+
+#: wb_portal
+msgid "No employee profile"
+msgstr "कोई कर्मचारी प्रोफ़ाइल नहीं"
+
+#: wb_portal
+msgid "No expenses yet. Submit your first expense on the left."
+msgstr "अभी कोई व्यय नहीं। बाईं ओर से अपना पहला व्यय जमा करें।"
+
+#: wb_portal
+msgid "No helpdesk team is available on this database yet."
+msgstr "इस डेटाबेस में अभी तक कोई हेल्पडेस्क टीम उपलब्ध नहीं है।"
+
+#: wb_portal
+msgid "No helpdesk team is configured on this database yet — please ask your administrator to create one."
+msgstr "इस डेटाबेस में अभी तक हेल्पडेस्क टीम कॉन्फ़िगर नहीं है — कृपया अपने प्रशासक से एक बनाने के लिए कहें।"
+
+#: wb_portal
+msgid "No leave balance available yet. Ask your manager to allocate some time off."
+msgstr "अभी तक अवकाश शेष उपलब्ध नहीं है। अपने प्रबंधक से अवकाश आवंटित करने के लिए कहें।"
+
+#: wb_portal
+msgid "No loans yet. Apply for your first loan on the left."
+msgstr "अभी कोई ऋण नहीं। बाईं ओर से अपना पहला ऋण माँगें।"
+
+#: wb_portal
+msgid "No notifications yet"
+msgstr "अभी कोई सूचना नहीं"
+
+#: wb_portal
+msgid "No of Days"
+msgstr "दिनों की संख्या"
+
+#: wb_portal
+msgid "No payslip found for the selected period."
+msgstr "चयनित अवधि के लिए कोई वेतन पर्ची नहीं मिली।"
+
+#: wb_portal
+msgid "No team available"
+msgstr "कोई टीम उपलब्ध नहीं"
+
+#: wb_portal
+msgid "No tickets yet. Submit your first complaint or suggestion on the left."
+msgstr "अभी कोई टिकट नहीं। बाईं ओर से अपनी पहली शिकायत या सुझाव जमा करें।"
+
+#: wb_portal
+msgid "No time off requests found."
+msgstr "कोई अवकाश आवेदन नहीं मिला।"
+
+#: wb_portal
+msgid "No time off requests yet."
+msgstr "अभी तक कोई अवकाश आवेदन नहीं।"
+
+#: wb_portal
+msgid "No upcoming events scheduled."
+msgstr "कोई आगामी इवेंट निर्धारित नहीं है।"
+
+#: wb_portal
+msgid "Not checked in"
+msgstr "उपस्थिति दर्ज नहीं है"
+
+#: wb_portal
+msgid "Notifications"
+msgstr "सूचनाएं"
+
+#: wb_portal
+msgid "Off Days"
+msgstr "अवकाश के दिन"
+
+#: wb_portal
+msgid "Ongoing"
+msgstr "जारी"
+
+#: wb_portal
+msgid "Opening:"
+msgstr "प्रारंभिक शेष:"
+
+#: wb_portal
+msgid "Other"
+msgstr "अन्य"
+
+#: wb_portal
+msgid "PDF, Word, PowerPoint, JPG or PNG · max 2 MB"
+msgstr "PDF, Word, PowerPoint, JPG या PNG · अधिकतम 2 MB"
+
+#: wb_portal
+msgid "Payslip"
+msgstr "वेतन पर्ची"
+
+#: wb_portal
+msgid "Payslip Detail"
+msgstr "वेतन पर्ची विवरण"
+
+#: wb_portal
+msgid "Payslip History"
+msgstr "वेतन पर्ची इतिहास"
+
+#: wb_portal
+msgid "Payslips"
+msgstr "वेतन पर्चियाँ"
+
+#: wb_portal
+msgid "Pending"
+msgstr "लंबित"
+
+#: wb_portal
+msgid "Pending Requests"
+msgstr "लंबित आवेदन"
+
+#: wb_portal
+msgid "Period"
+msgstr "अवधि"
+
+#: wb_portal
+msgid "Personal"
+msgstr "व्यक्तिगत"
+
+#: wb_portal
+msgid "Pinned"
+msgstr "पिन किया गया"
+
+#: wb_portal
+msgid "Planning"
+msgstr "प्लानिंग"
+
+#: wb_portal
+msgid "Please enter a description for the expense."
+msgstr "कृपया व्यय का विवरण दर्ज करें।"
+
+#: wb_portal
+msgid "Please enter a subject for your ticket."
+msgstr "कृपया अपने टिकट का विषय दर्ज करें।"
+
+#: wb_portal
+msgid "Please review this request in the"
+msgstr "कृपया इस आवेदन की समीक्षा करें"
+
+#: wb_portal
+msgid "Please select a leave type."
+msgstr "कृपया अवकाश प्रकार चुनें।"
+
+#: wb_portal
+msgid "Please select a team."
+msgstr "कृपया टीम चुनें।"
+
+#: wb_portal
+msgid "Please select a valid team."
+msgstr "कृपया मान्य टीम चुनें।"
+
+#: wb_portal
+msgid "Please select both the \"Leave From\" and \"Leave To\" dates."
+msgstr "कृपया \"अवकाश प्रारंभ\" और \"अवकाश समाप्ति\" दोनों तिथियाँ चुनें।"
+
+#: wb_portal
+msgid "Present"
+msgstr "उपस्थित"
+
+#: wb_portal
+msgid "Priority"
+msgstr "प्राथमिकता"
+
+#: wb_portal
+msgid "Quantity"
+msgstr "मात्रा"
+
+#: wb_portal
+msgid "Quick Access"
+msgstr "त्वरित पहुँच"
+
+#: wb_portal
+msgid "Ready to check in"
+msgstr "उपस्थिति दर्ज करने हेतु तैयार"
+
+#: wb_portal
+msgid "Reason"
+msgstr "कारण"
+
+#: wb_portal
+msgid "Reference"
+msgstr "संदर्भ"
+
+#: wb_portal
+msgid "Refuse"
+msgstr "अस्वीकृत करें"
+
+#: wb_portal
+msgid "Refused"
+msgstr "अस्वीकृत"
+
+#: wb_portal
+msgid "Requests"
+msgstr "आवेदन"
+
+#: wb_portal
+msgid "Reset"
+msgstr "रीसेट करें"
+
+#: wb_portal
+msgid "Salary Lines"
+msgstr "वेतन मदें"
+
+#: wb_portal
+msgid "Salary Rule"
+msgstr "वेतन नियम"
+
+#: wb_portal
+msgid "Second Approval"
+msgstr "द्वितीय अनुमोदन"
+
+#: wb_portal
+msgid "Select a leave type…"
+msgstr "अवकाश प्रकार चुनें…"
+
+#: wb_portal
+msgid "Shifts"
+msgstr "शिफ्ट"
+
+#: wb_portal
+msgid "Since"
+msgstr "से"
+
+#: wb_portal
+msgid "Status"
+msgstr "स्थिति"
+
+#: wb_portal
+msgid "Subject"
+msgstr "विषय"
+
+#: wb_portal
+msgid "Submit Expense"
+msgstr "व्यय जमा करें"
+
+#: wb_portal
+msgid "Submit Request"
+msgstr "आवेदन जमा करें"
+
+#: wb_portal
+msgid "Submit Ticket"
+msgstr "टिकट जमा करें"
+
+#: wb_portal
+msgid "Tap the button to record your attendance."
+msgstr "उपस्थिति दर्ज करने के लिए बटन दबाएँ।"
+
+#: wb_portal
+msgid "Team"
+msgstr "टीम"
+
+#: wb_portal
+msgid "The \"Leave To\" date cannot be before the \"Leave From\" date."
+msgstr "\"अवकाश समाप्ति\" की तिथि \"अवकाश प्रारंभ\" से पहले नहीं हो सकती।"
+
+#: wb_portal
+msgid "The Events module is not installed on this database."
+msgstr "इवेंट मॉड्यूल इस डेटाबेस में स्थापित नहीं है।"
+
+#: wb_portal
+msgid "The amount must be greater than zero."
+msgstr "राशि शून्य से अधिक होनी चाहिए।"
+
+#: wb_portal
+msgid "The amount or installments you entered are not valid."
+msgstr "आपके द्वारा दर्ज राशि या किस्तें मान्य नहीं हैं।"
+
+#: wb_portal
+msgid "The amount you entered is not valid."
+msgstr "आपके द्वारा दर्ज राशि मान्य नहीं है।"
+
+#: wb_portal
+msgid "The dates you entered are not valid."
+msgstr "आपके द्वारा दर्ज तिथियाँ मान्य नहीं हैं।"
+
+#: wb_portal
+msgid "The loan amount must be greater than zero."
+msgstr "ऋण राशि शून्य से अधिक होनी चाहिए।"
+
+#: wb_portal
+msgid "The number of installments must be at least 1."
+msgstr "किस्तों की संख्या कम से कम 1 होनी चाहिए।"
+
+#: wb_portal
+msgid "This Month"
+msgstr "इस महीने"
+
+#: wb_portal
+msgid "This Week"
+msgstr "इस सप्ताह"
+
+#: wb_portal
+msgid "This is an automated message from the HR portal."
+msgstr "यह HR पोर्टल से एक स्वचालित संदेश है।"
+
+#: wb_portal
+msgid "Ticket"
+msgstr "टिकट"
+
+#: wb_portal
+msgid "Time Off"
+msgstr "अवकाश"
+
+#: wb_portal
+msgid "Time Off Request"
+msgstr "अवकाश आवेदन"
+
+#: wb_portal
+msgid "Time off - awaiting final approval"
+msgstr "अवकाश - अंतिम अनुमोदन की प्रतीक्षा"
+
+#: wb_portal
+msgid "Time off approved"
+msgstr "अवकाश स्वीकृत"
+
+#: wb_portal
+msgid "Time off refused"
+msgstr "अवकाश अस्वीकृत"
+
+#: wb_portal
+msgid "To"
+msgstr "तक"
+
+#: wb_portal
+msgid "To Approve"
+msgstr "अनुमोदन हेतु"
+
+#: wb_portal
+msgid "To Submit"
+msgstr "जमा करने हेतु"
+
+#: wb_portal
+msgid "Total"
+msgstr "कुल"
+
+#: wb_portal
+msgid "Total Hours"
+msgstr "कुल घंटे"
+
+#: wb_portal
+msgid "Total work hours in the selected period"
+msgstr "चयनित अवधि में कुल कार्य घंटे"
+
+#: wb_portal
+msgid "Type"
+msgstr "प्रकार"
+
+#: wb_portal
+msgid "Unknown"
+msgstr "अज्ञात"
+
+#: wb_portal
+msgid "Upcoming Events"
+msgstr "आगामी इवेंट"
+
+#: wb_portal
+msgid "Upload"
+msgstr "अपलोड"
+
+#: wb_portal
+msgid "Vehicle"
+msgstr "वाहन"
+
+#: wb_portal
+msgid "View"
+msgstr "देखें"
+
+#: wb_portal
+msgid "View all"
+msgstr "सभी देखें"
+
+#: wb_portal
+msgid "Week of %s"
+msgstr "%s का सप्ताह"
+
+#: wb_portal
+msgid "Weekend"
+msgstr "सप्ताहांत"
+
+#: wb_portal
+msgid "Work Hours"
+msgstr "कार्य घंटे"
+
+#: wb_portal
+msgid "You"
+msgstr "आप"
+
+#: wb_portal
+msgid "You are not checked in yet today."
+msgstr "आपने आज अभी उपस्थिति दर्ज नहीं की है।"
+
+#: wb_portal
+msgid "You have not submitted any time off request yet."
+msgstr "आपने अभी तक कोई अवकाश आवेदन जमा नहीं किया।"
+
+#: wb_portal
+msgid "You're all caught up — no pending requests."
+msgstr "आपने सब पूरा कर लिया — कोई लंबित आवेदन नहीं।"
+
+#: wb_portal
+msgid "Your application will be reviewed by HR."
+msgstr "आपके आवेदन की समीक्षा HR द्वारा की जाएगी।"
+
+#: wb_portal
+msgid "Your time off request %s has passed the first approval."
+msgstr "आपका अवकाश आवेदन %s पहले अनुमोदन से पारित हो गया।"
+
+#: wb_portal
+msgid "Your time off request %s was approved."
+msgstr "आपका अवकाश आवेदन %s स्वीकृत हो गया।"
+
+#: wb_portal
+msgid "Your time off request %s was refused."
+msgstr "आपका अवकाश आवेदन %s अस्वीकृत हो गया।"
+
+#: wb_portal
+msgid "Your user account is not linked to any employee record. Please contact your HR administrator."
+msgstr "आपका खाता किसी कर्मचारी रिकॉर्ड से संबद्ध नहीं है। कृपया अपने HR प्रशासक से संपर्क करें।"
+
+#: wb_portal
+msgid "awaiting action"
+msgstr "कार्रवाई की प्रतीक्षा"
+
+#: wb_portal
+msgid "days"
+msgstr "दिन"
+
+#: wb_portal
+msgid "half days"
+msgstr "आधे दिन"
+
+#: wb_portal
+msgid "has submitted a time off request:"
+msgstr "ने अवकाश आवेदन जमा किया है:"
+
+#: wb_portal
+msgid "hours"
+msgstr "घंटे"
+
+#: wb_portal
+msgid "just now"
+msgstr "अभी"
+
+#: wb_portal
+msgid "record(s)"
+msgstr "रिकॉर्ड"
+
+#: wb_portal
+msgid "request(s)"
+msgstr "आवेदन"
+
+#: wb_portal
+msgid "seats left"
+msgstr "सीटें शेष"
+
+#: wb_portal
+msgid "ticket(s)"
+msgstr "टिकट"
+
+#: wb_portal
+msgid "upcoming"
+msgstr "आगामी"
+
+#: wb_portal
+msgid "work"
+msgstr "कार्य"

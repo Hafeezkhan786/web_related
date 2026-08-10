@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_gen_form" model="ir.ui.view">
+        <field name="name">hr.leave.form.inherit.wb.sequence</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='holiday_status_id']" position="before">
+                <field name="sequence" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="seq_gen_tree" model="ir.ui.view">
+        <field name="name">hr.leave.tree.inherit.wb.sequence</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list/field[@name='employee_id']" position="after">
+                <field name="sequence" string="Leave Code"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

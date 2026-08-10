@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_attendance_form_inherit_geo" model="ir.ui.view">
+        <field name="name">hr.attendance.form.inherit.wb.geo</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='check_in_group']" position="inside">
+                <group>
+                    <field name="work_location_id" string="Work Location"/>
+                    <field name="geo_verified" string="Location Verified"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_attendance_tree_inherit_geo" model="ir.ui.view">
+        <field name="name">hr.attendance.tree.inherit.wb.geo</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list/field[@name='worked_hours']" position="after">
+                <field name="work_location_id" optional="hide"/>
+                <field name="geo_verified" optional="hide" string="Location Verified"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

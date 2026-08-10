@@ -1,0 +1,713 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================================
+         Planning (/planning/)
+         ============================================================ -->
+    <template id="my_planning" name="My Planning">
+        <t t-call="wb_portal.wb_portal_layout">
+            <div class="wb-page" t-att-data-wb-theme="wb_theme_preset or 'default'">
+                <div class="wb-hero">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                        <div>
+                            <nav class="wb-crumb" aria-label="breadcrumb">
+                                <a href="/home/">Home</a><span class="wb-crumb-sep">/</span><span>Planning</span>
+                            </nav>
+                            <h1 class="wb-hero-title">My Planning</h1>
+                        </div>
+                        <a class="wb-btn wb-btn--light" href="/home/"><i class="fa fa-arrow-left"/>Dashboard</a>
+                    </div>
+                </div>
+
+                <form class="wb-card wb-filter mt-3" action="/planning/" method="post">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="wb-filter-field">
+                        <label for="wb_period">View</label>
+                        <select id="wb_period" name="period" class="form-select">
+                            <option value="week" t-att-selected="period == 'week' and 'selected' or None">This Week</option>
+                            <option value="month" t-att-selected="period == 'month' and 'selected' or None">This Month</option>
+                        </select>
+                    </div>
+                    <div class="wb-filter-actions">
+                        <button class="wb-btn wb-btn--primary" type="submit"><i class="fa fa-filter"/>Apply</button>
+                    </div>
+                </form>
+
+                <div class="wb-card mt-3">
+                    <div class="wb-card-head">
+                        <h2><i class="fa fa-calendar-check-o"/>Shifts</h2>
+                        <span class="wb-card-badge"><t t-esc="period_label"/></span>
+                    </div>
+                    <div class="wb-card-body">
+                        <t t-if="slot_data">
+                            <div class="wb-shift-list">
+                                <t t-foreach="slot_data" t-as="s">
+                                    <div class="wb-shift">
+                                        <div class="wb-shift-date">
+                                            <span class="wb-shift-day" t-esc="s['start'].strftime('%d')"/>
+                                            <span class="wb-shift-month" t-esc="s['start'].strftime('%b')"/>
+                                        </div>
+                                        <div class="flex-grow-1" style="min-width: 0;">
+                                            <div class="wb-shift-time">
+                                                <i class="fa fa-clock-o"/>
+                                                <t t-esc="s['start'].strftime('%A %d-%m-%Y %H:%M')"/>
+                                                <t t-if="s['end']"> — <t t-esc="s['end'].strftime('%H:%M')"/></t>
+                                            </div>
+                                            <div class="wb-shift-meta">
+                                                <span t-if="s['role']"><i class="fa fa-user-o"/><t t-esc="s['role']"/></span>
+                                                <span t-if="s['project']"><i class="fa fa-briefcase"/><t t-esc="s['project']"/></span>
+                                                <span t-if="s['task']"><i class="fa fa-tasks"/><t t-esc="s['task']"/></span>
+                                            </div>
+                                        </div>
+                                        <t t-set="shift_state" t-value="s['state']"/>
+                                        <span t-attf-class="wb-badge {{shift_state == 'published' and 'wb-badge--success' or (shift_state == 'draft' and 'wb-badge--warning' or 'wb-badge--neutral')}}">
+                                            <t t-esc="shift_state or '—'"/>
+                                        </span>
+                                    </div>
+                                </t>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <div class="wb-empty">
+                                <i class="fa fa-calendar-check-o"/>
+                                <p>No shifts planned for <t t-esc="period_label"/>. Enjoy the free time!</p>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================================
+         Announcements (/announcements/)
+         ============================================================ -->
+    <template id="my_announcements" name="Announcements">
+        <t t-call="wb_portal.wb_portal_layout">
+            <div class="wb-page" t-att-data-wb-theme="wb_theme_preset or 'default'">
+                <div class="wb-hero">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                        <div>
+                            <nav class="wb-crumb" aria-label="breadcrumb">
+                                <a href="/home/">Home</a><span class="wb-crumb-sep">/</span><span>Announcements</span>
+                            </nav>
+                            <h1 class="wb-hero-title">Company Announcements</h1>
+                        </div>
+                        <a class="wb-btn wb-btn--light" href="/home/"><i class="fa fa-arrow-left"/>Dashboard</a>
+                    </div>
+                </div>
+
+                <div class="wb-card mt-3">
+                    <div class="wb-card-head">
+                        <h2><i class="fa fa-bullhorn"/>Latest News</h2>
+                        <span t-if="channel" class="wb-card-badge">
+                            <i class="fa fa-comments-o"/> <t t-esc="channel.name"/>
+                        </span>
+                    </div>
+                    <div class="wb-card-body">
+                        <t t-if="announcements">
+                            <div class="wb-announcement-list">
+                                <t t-foreach="announcements" t-as="a">
+                                    <article t-attf-class="wb-announcement {{a['pinned'] and 'wb-announcement--pinned' or ''}}">
+                                        <div class="wb-announcement-avatar">
+                                            <i class="fa fa-user-circle-o"/>
+                                        </div>
+                                        <div class="flex-grow-1" style="min-width: 0;">
+                                            <div class="d-flex flex-wrap align-items-center gap-2">
+                                                <h3 class="wb-announcement-title mb-0"><t t-esc="a['subject']"/></h3>
+                                                <span t-if="a['pinned']" class="wb-badge wb-badge--danger">
+                                                    <i class="fa fa-thumb-tack"/>Pinned
+                                                </span>
+                                            </div>
+                                            <div class="wb-announcement-meta">
+                                                <span><i class="fa fa-user"/><t t-esc="a['author']"/></span>
+                                                <span><i class="fa fa-clock-o"/>
+                                                    <t t-if="a['date']" t-esc="a['date'].strftime('%d-%m-%Y %H:%M')"/>
+                                                </span>
+                                            </div>
+                                            <div class="wb-announcement-body" t-out="a['body_html']"/>
+                                        </div>
+                                    </article>
+                                </t>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <div class="wb-empty">
+                                <i class="fa fa-bullhorn"/>
+                                <p>No announcements yet. Check back soon!</p>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================================
+         Events (/events/)
+         ============================================================ -->
+    <template id="my_events" name="Events">
+        <t t-call="wb_portal.wb_portal_layout">
+            <div class="wb-page" t-att-data-wb-theme="wb_theme_preset or 'default'">
+                <div class="wb-hero">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                        <div>
+                            <nav class="wb-crumb" aria-label="breadcrumb">
+                                <a href="/home/">Home</a><span class="wb-crumb-sep">/</span><span>Events</span>
+                            </nav>
+                            <h1 class="wb-hero-title">Upcoming Events</h1>
+                        </div>
+                        <a class="wb-btn wb-btn--light" href="/home/"><i class="fa fa-arrow-left"/>Dashboard</a>
+                    </div>
+                </div>
+
+                <div class="wb-card mt-3">
+                    <div class="wb-card-head">
+                        <h2><i class="fa fa-calendar"/>Calendar</h2>
+                        <span class="wb-card-badge"><t t-esc="len(event_data)"/> upcoming</span>
+                    </div>
+                    <div class="wb-card-body">
+                        <t t-if="event_data">
+                            <div class="row g-3">
+                                <t t-foreach="event_data" t-as="ev">
+                                    <div class="col-12 col-md-6 col-xl-4">
+                                        <div class="wb-event-card">
+                                            <div class="wb-event-date">
+                                                <span class="wb-event-day" t-esc="ev['date_begin'].strftime('%d')"/>
+                                                <span class="wb-event-month" t-esc="ev['date_begin'].strftime('%b')"/>
+                                            </div>
+                                            <div class="wb-event-info">
+                                                <h3 class="wb-event-title"><t t-esc="ev['name']"/></h3>
+                                                <div class="wb-event-meta">
+                                                    <span t-if="ev['event_type']"><i class="fa fa-tag"/><t t-esc="ev['event_type']"/></span>
+                                                    <span t-if="ev['address']"><i class="fa fa-map-marker"/><t t-esc="ev['address']"/></span>
+                                                    <span><i class="fa fa-clock-o"/>
+                                                        <t t-if="ev['date_begin']" t-esc="ev['date_begin'].strftime('%H:%M')"/>
+                                                        <t t-if="ev['date_end']"> — <t t-esc="ev['date_end'].strftime('%H:%M %d-%m-%Y')"/></t>
+                                                    </span>
+                                                    <span t-if="ev['seats_available']"><i class="fa fa-users"/><t t-esc="ev['seats_available']"/> seats left</span>
+                                                </div>
+                                                <div t-if="ev['description']" class="wb-event-desc" t-out="ev['description']"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <div class="wb-empty">
+                                <i class="fa fa-calendar"/>
+                                <p>No upcoming events scheduled.</p>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================================
+         Expenses (/expenses/)
+         ============================================================ -->
+    <template id="my_expenses" name="Expenses">
+        <t t-call="wb_portal.wb_portal_layout">
+            <div class="wb-page" t-att-data-wb-theme="wb_theme_preset or 'default'">
+                <div class="wb-hero">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                        <div>
+                            <nav class="wb-crumb" aria-label="breadcrumb">
+                                <a href="/home/">Home</a><span class="wb-crumb-sep">/</span><span>Expenses</span>
+                            </nav>
+                            <h1 class="wb-hero-title">My Expenses</h1>
+                        </div>
+                        <a class="wb-btn wb-btn--light" href="/home/"><i class="fa fa-arrow-left"/>Dashboard</a>
+                    </div>
+                </div>
+
+                <div class="row g-3 mt-1">
+                    <div class="col-lg-5">
+                        <form class="wb-card" action="/expenses/new/" method="post">
+                            <div class="wb-card-head"><h2><i class="fa fa-plus-circle"/>New Expense</h2></div>
+                            <div class="wb-card-body">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <t t-if="error">
+                                    <div class="wb-alert-error mb-3">
+                                        <i class="fa fa-exclamation-triangle"/>
+                                        <span><t t-out="error"/></span>
+                                    </div>
+                                </t>
+
+                                <div class="wb-form-row">
+                                    <label for="wb_exp_name">Description</label>
+                                    <input id="wb_exp_name" type="text" name="name" class="form-control"
+                                           required="required" placeholder="e.g. Client lunch, taxi to airport…"/>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-6">
+                                        <div class="wb-form-row">
+                                            <label for="wb_exp_date">Date</label>
+                                            <input id="wb_exp_date" type="date" name="date" class="form-control"
+                                                   t-att-value="today.strftime('%Y-%m-%d')"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="wb-form-row">
+                                            <label for="wb_exp_product">Category</label>
+                                            <select id="wb_exp_product" name="product_id" class="form-select">
+                                                <option value="">— No category —</option>
+                                                <t t-foreach="expense_products" t-as="p">
+                                                    <option t-att-value="p['id']"><t t-esc="p['name']"/></option>
+                                                </t>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-6">
+                                        <div class="wb-form-row">
+                                            <label for="wb_exp_amount">Amount</label>
+                                            <input id="wb_exp_amount" type="number" name="amount" class="form-control"
+                                                   step="0.01" min="0.01" required="required"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="wb-form-row">
+                                            <label for="wb_exp_qty">Quantity</label>
+                                            <input id="wb_exp_qty" type="number" name="quantity" class="form-control"
+                                                   value="1" step="1" min="1"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex gap-2 mt-1">
+                                    <button class="wb-btn wb-btn--primary" type="submit"><i class="fa fa-paper-plane"/>Submit Expense</button>
+                                    <a class="wb-btn wb-btn--ghost" href="/expenses/">Cancel</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-lg-7">
+                        <div class="wb-card h-100">
+                            <div class="wb-card-head">
+                                <h2><i class="fa fa-list-alt"/>Expense History</h2>
+                                <span class="wb-card-badge"><t t-esc="len(expense_data)"/> record(s)</span>
+                            </div>
+                            <t t-call="portal.portal_table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Description</th>
+                                        <th class="text-center">Date</th>
+                                        <th class="text-center">Amount</th>
+                                        <th class="text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="expense_data" t-as="exp">
+                                        <tr>
+                                            <td class="text-center"><t t-esc="exp['name']"/></td>
+                                            <td class="text-center">
+                                                <t t-if="exp['date']" t-esc="exp['date'].strftime('%d-%m-%Y')"/>
+                                                <t t-else="">—</t>
+                                            </td>
+                                            <td class="text-center fw-bold">
+                                                <t t-esc="exp['currency']"/><t t-esc="'{0:,.2f}'.format(exp['amount'])"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <t t-set="es" t-value="exp['state']"/>
+                                                <t t-set="es_label" t-value="es == 'draft' and 'To Report' or (es == 'reported' and 'To Submit' or (es == 'submitted' and 'Submitted' or (es == 'approved' and 'Approved' or (es == 'done' and 'Done' or (es == 'refused' and 'Refused' or es)))))"/>
+                                                <t t-set="es_cls" t-value="es == 'done' and 'wb-badge--success' or (es in ('submitted', 'approved') and 'wb-badge--info' or (es == 'refused' and 'wb-badge--danger' or (es == 'draft' and 'wb-badge--neutral' or 'wb-badge--warning')))"/>
+                                                <span t-attf-class="wb-badge {{es_cls}}" t-esc="es_label"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </t>
+                            <t t-if="not expense_data">
+                                <div class="wb-empty">
+                                    <i class="fa fa-credit-card"/>
+                                    <p>No expenses yet. Submit your first expense on the left.</p>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================================
+         Loans (/loans/)
+         ============================================================ -->
+    <template id="my_loans" name="Loans">
+        <t t-call="wb_portal.wb_portal_layout">
+            <div class="wb-page" t-att-data-wb-theme="wb_theme_preset or 'default'">
+                <div class="wb-hero">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                        <div>
+                            <nav class="wb-crumb" aria-label="breadcrumb">
+                                <a href="/home/">Home</a><span class="wb-crumb-sep">/</span><span>Loans</span>
+                            </nav>
+                            <h1 class="wb-hero-title">My Loans</h1>
+                        </div>
+                        <a class="wb-btn wb-btn--light" href="/home/"><i class="fa fa-arrow-left"/>Dashboard</a>
+                    </div>
+                </div>
+
+                <div class="row g-3 mt-1">
+                    <div class="col-lg-5">
+                        <form class="wb-card" action="/loans/new/" method="post">
+                            <div class="wb-card-head"><h2><i class="fa fa-plus-circle"/>Apply for a Loan</h2></div>
+                            <div class="wb-card-body">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <t t-if="error">
+                                    <div class="wb-alert-error mb-3">
+                                        <i class="fa fa-exclamation-triangle"/>
+                                        <span><t t-out="error"/></span>
+                                    </div>
+                                </t>
+
+                                <div class="wb-form-row">
+                                    <label for="wb_loan_type">Loan Type</label>
+                                    <select id="wb_loan_type" name="loan_type" class="form-select">
+                                        <option value="personal">Personal</option>
+                                        <option value="medical">Medical</option>
+                                        <option value="education">Education</option>
+                                        <option value="vehicle">Vehicle</option>
+                                        <option value="house">House</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-6">
+                                        <div class="wb-form-row">
+                                            <label for="wb_loan_amount">Loan Amount</label>
+                                            <input id="wb_loan_amount" type="number" name="amount" class="form-control"
+                                                   step="0.01" min="0.01" required="required"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="wb-form-row">
+                                            <label for="wb_loan_installments">Installments</label>
+                                            <input id="wb_loan_installments" type="number" name="installments" class="form-control"
+                                                   value="12" step="1" min="1"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="wb-form-row">
+                                    <label for="wb_loan_reason">Reason</label>
+                                    <textarea id="wb_loan_reason" name="reason" class="form-control" rows="3"
+                                              placeholder="Explain why you need this loan…"/>
+                                </div>
+
+                                <div class="d-flex gap-2 mt-1">
+                                    <button class="wb-btn wb-btn--primary" type="submit"><i class="fa fa-paper-plane"/>Apply</button>
+                                    <a class="wb-btn wb-btn--ghost" href="/loans/">Cancel</a>
+                                </div>
+                                <p class="text-muted mt-3 mb-0 small">
+                                    <i class="fa fa-info-circle"/> Your application will be reviewed by HR.
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-lg-7">
+                        <div class="wb-card h-100">
+                            <div class="wb-card-head">
+                                <h2><i class="fa fa-list-alt"/>Loan History</h2>
+                                <span class="wb-card-badge"><t t-esc="len(loan_data)"/> record(s)</span>
+                            </div>
+                            <t t-call="portal.portal_table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Reference</th>
+                                        <th class="text-center">Type</th>
+                                        <th class="text-center">Amount</th>
+                                        <th class="text-center">Installments</th>
+                                        <th class="text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="loan_data" t-as="loan">
+                                        <tr>
+                                            <td class="text-center fw-bold"><t t-esc="loan['name']"/></td>
+                                            <td class="text-center">
+                                                <t t-esc="loan['loan_type'] or '—'"/>
+                                            </td>
+                                            <td class="text-center fw-bold">
+                                                <t t-esc="loan['currency']"/><t t-esc="'{0:,.2f}'.format(loan['amount'])"/>
+                                            </td>
+                                            <td class="text-center"><t t-esc="loan['installments'] or '—'"/></td>
+                                            <td class="text-center">
+                                                <t t-set="ls" t-value="loan['state']"/>
+                                                <t t-set="ls_label" t-value="ls == 'draft' and 'Draft' or (ls == 'submitted' and 'Submitted' or (ls == 'approved' and 'Approved' or (ls == 'paid' and 'Paid' or (ls == 'refused' and 'Refused' or (ls == 'cancelled' and 'Cancelled' or ls)))))"/>
+                                                <t t-set="ls_cls" t-value="ls in ('approved', 'paid') and 'wb-badge--success' or (ls == 'submitted' and 'wb-badge--warning' or (ls in ('refused', 'cancelled') and 'wb-badge--danger' or 'wb-badge--neutral'))"/>
+                                                <span t-attf-class="wb-badge {{ls_cls}}" t-esc="ls_label"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </t>
+                            <t t-if="not loan_data">
+                                <div class="wb-empty">
+                                    <i class="fa fa-money"/>
+                                    <p>No loans yet. Apply for your first loan on the left.</p>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================================
+         Helpdesk — complaints & suggestions (/helpdesk/)
+         ============================================================ -->
+    <template id="my_helpdesk" name="Helpdesk">
+        <t t-call="wb_portal.wb_portal_layout">
+            <div class="wb-page" t-att-data-wb-theme="wb_theme_preset or 'default'">
+                <div class="wb-hero">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                        <div>
+                            <nav class="wb-crumb" aria-label="breadcrumb">
+                                <a href="/home/">Home</a><span class="wb-crumb-sep">/</span><span>Helpdesk</span>
+                            </nav>
+                            <h1 class="wb-hero-title">Complaints &amp; Suggestions</h1>
+                        </div>
+                        <a class="wb-btn wb-btn--light" href="/home/"><i class="fa fa-arrow-left"/>Dashboard</a>
+                    </div>
+                </div>
+
+                <div class="row g-3 mt-1">
+                    <div class="col-lg-5">
+                        <form class="wb-card" action="/helpdesk/new/" method="post">
+                            <div class="wb-card-head"><h2><i class="fa fa-life-ring"/>New Ticket</h2></div>
+                            <div class="wb-card-body">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <t t-if="error">
+                                    <div class="wb-alert-error mb-3">
+                                        <i class="fa fa-exclamation-triangle"/>
+                                        <span><t t-out="error"/></span>
+                                    </div>
+                                </t>
+
+                                <div class="wb-form-row">
+                                    <label for="wb_hd_subject">Subject</label>
+                                    <input id="wb_hd_subject" type="text" name="subject" class="form-control"
+                                           required="required" placeholder="Briefly describe your complaint or suggestion…"/>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="wb-form-row">
+                                            <label for="wb_hd_team">Team</label>
+                                            <t t-if="has_teams">
+                                                <select id="wb_hd_team" name="team_id" class="form-select" required="required">
+                                                    <option value="">Select a team…</option>
+                                                    <t t-foreach="teams" t-as="tm">
+                                                        <option t-att-value="tm['id']"><t t-esc="tm['name']"/></option>
+                                                    </t>
+                                                </select>
+                                            </t>
+                                            <t t-else="">
+                                                <select id="wb_hd_team" name="team_id" class="form-select" disabled="disabled">
+                                                    <option value="">No team available</option>
+                                                </select>
+                                            </t>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="wb-form-row">
+                                            <label for="wb_hd_priority">Priority</label>
+                                            <select id="wb_hd_priority" name="priority" class="form-select">
+                                                <t t-foreach="priority_options" t-as="p">
+                                                    <option t-att-value="p['key']"><t t-esc="p['label']"/></option>
+                                                </t>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="wb-form-row">
+                                    <label for="wb_hd_desc">Description</label>
+                                    <textarea id="wb_hd_desc" name="description" class="form-control" rows="4"
+                                              placeholder="Give us the details so we can help you faster…"/>
+                                </div>
+
+                                <div class="d-flex gap-2 mt-1">
+                                    <button class="wb-btn wb-btn--primary" type="submit" t-att-disabled="not has_teams and 'disabled' or None">
+                                        <i class="fa fa-paper-plane"/>Submit Ticket
+                                    </button>
+                                    <a class="wb-btn wb-btn--ghost" href="/helpdesk/">Cancel</a>
+                                </div>
+                                <p t-if="not has_teams" class="text-muted mt-3 mb-0 small">
+                                    <i class="fa fa-info-circle"/> No helpdesk team is configured on this database yet — please ask your administrator to create one.
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-lg-7">
+                        <div class="wb-card h-100">
+                            <div class="wb-card-head">
+                                <h2><i class="fa fa-list-alt"/>My Tickets</h2>
+                                <span class="wb-card-badge"><t t-esc="len(tickets)"/> ticket(s)</span>
+                            </div>
+                            <form class="wb-filter" action="/helpdesk/" method="post" style="border-bottom:1px solid var(--wb-border);">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <div class="wb-filter-field">
+                                    <label for="wb_hd_state">Status</label>
+                                    <select id="wb_hd_state" name="state" class="form-select">
+                                        <option value="all" t-att-selected="state_filter == 'all' and 'selected' or None">All statuses</option>
+                                        <t t-foreach="state_options" t-as="so">
+                                            <option t-att-value="so['key']"
+                                                    t-att-selected="state_filter == so['key'] and 'selected' or None">
+                                                <t t-esc="so['label']"/>
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+                                <div class="wb-filter-actions">
+                                    <button class="wb-btn wb-btn--primary wb-btn--sm" type="submit"><i class="fa fa-filter"/>Filter</button>
+                                </div>
+                            </form>
+                            <t t-call="portal.portal_table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Ticket</th>
+                                        <th class="text-center">Team</th>
+                                        <th class="text-center">Created</th>
+                                        <th class="text-center">Priority</th>
+                                        <th class="text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="tickets" t-as="t">
+                                        <tr>
+                                            <td class="text-center">
+                                                <a t-attf-href="/helpdesk/{{t['id']}}"><t t-esc="t['name']"/></a>
+                                            </td>
+                                            <td class="text-center"><t t-esc="t['team'] or '—'"/></td>
+                                            <td class="text-center">
+                                                <t t-if="t['create_date']" t-esc="t['create_date'].strftime('%d-%m-%Y')"/>
+                                                <t t-else="">—</t>
+                                            </td>
+                                            <td class="text-center"><t t-esc="t['priority'] or '—'"/></td>
+                                            <td class="text-center">
+                                                <t t-set="hd_state" t-value="t['state']"/>
+                                                <t t-set="hd_label" t-value="hd_state and hd_state.replace('_', ' ').title() or '—'"/>
+                                                <t t-set="hd_cls" t-value="hd_state in ('done', 'resolved') and 'wb-badge--success' or (hd_state in ('open', 'incoming') and 'wb-badge--info' or (hd_state == 'cancelled' and 'wb-badge--danger' or 'wb-badge--warning'))"/>
+                                                <span t-attf-class="wb-badge {{hd_cls}}" t-esc="hd_label"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </t>
+                            <t t-if="not tickets">
+                                <div class="wb-empty">
+                                    <i class="fa fa-life-ring"/>
+                                    <p>No tickets yet. Submit your first complaint or suggestion on the left.</p>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Helpdesk ticket detail -->
+    <template id="helpdesk_detail" name="Helpdesk Ticket Detail">
+        <t t-call="wb_portal.wb_portal_layout">
+            <div class="wb-page" t-att-data-wb-theme="wb_theme_preset or 'default'">
+                <div class="wb-hero">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                        <div>
+                            <nav class="wb-crumb" aria-label="breadcrumb">
+                                <a href="/home/">Home</a><span class="wb-crumb-sep">/</span>
+                                <a href="/helpdesk/">Helpdesk</a><span class="wb-crumb-sep">/</span><span>Ticket</span>
+                            </nav>
+                            <h1 class="wb-hero-title"><t t-esc="ticket['name']"/></h1>
+                        </div>
+                        <a class="wb-btn wb-btn--light" href="/helpdesk/"><i class="fa fa-arrow-left"/>All Tickets</a>
+                    </div>
+                </div>
+
+                <div class="wb-card mt-3">
+                    <div class="wb-card-body">
+                        <div class="row g-3">
+                            <div class="col-6 col-md-3">
+                                <div class="wb-stat-label">Team</div>
+                                <div class="fw-bold"><t t-esc="ticket['team'] or '—'"/></div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="wb-stat-label">Status</div>
+                                <t t-set="hd_state" t-value="ticket['state']"/>
+                                <t t-set="hd_label" t-value="hd_state and hd_state.replace('_', ' ').title() or '—'"/>
+                                <t t-set="hd_cls" t-value="hd_state in ('done', 'resolved') and 'wb-badge--success' or (hd_state in ('open', 'incoming') and 'wb-badge--info' or (hd_state == 'cancelled' and 'wb-badge--danger' or 'wb-badge--warning'))"/>
+                                <span t-attf-class="wb-badge {{hd_cls}}" t-esc="hd_label"/>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="wb-stat-label">Priority</div>
+                                <div class="fw-bold"><t t-esc="ticket['priority'] or '—'"/></div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="wb-stat-label">Created</div>
+                                <div class="fw-bold">
+                                    <t t-if="ticket['create_date']" t-esc="ticket['create_date'].strftime('%d-%m-%Y %H:%M')"/>
+                                    <t t-else="">—</t>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wb-card mt-3">
+                    <div class="wb-card-head"><h2><i class="fa fa-comments-o"/>Conversation</h2></div>
+                    <div class="wb-card-body">
+                        <t t-if="ticket['description'] or messages">
+                            <div class="wb-announcement-list">
+                                <article t-if="ticket['description']" class="wb-announcement">
+                                    <div class="wb-announcement-avatar"><i class="fa fa-user-o"/></div>
+                                    <div class="flex-grow-1" style="min-width: 0;">
+                                        <div class="wb-announcement-meta">
+                                            <span><i class="fa fa-user"/>You</span>
+                                            <span><i class="fa fa-clock-o"/>
+                                                <t t-if="ticket['create_date']" t-esc="ticket['create_date'].strftime('%d-%m-%Y %H:%M')"/>
+                                            </span>
+                                        </div>
+                                        <div class="wb-announcement-body" t-out="ticket['description']"/>
+                                    </div>
+                                </article>
+                                <t t-foreach="messages" t-as="m">
+                                    <article class="wb-announcement">
+                                        <div class="wb-announcement-avatar"><i class="fa fa-user-o"/></div>
+                                        <div class="flex-grow-1" style="min-width: 0;">
+                                            <div class="wb-announcement-meta">
+                                                <span><i class="fa fa-user"/><t t-esc="m['author']"/></span>
+                                                <span><i class="fa fa-clock-o"/>
+                                                    <t t-if="m['date']" t-esc="m['date'].strftime('%d-%m-%Y %H:%M')"/>
+                                                </span>
+                                            </div>
+                                            <div class="wb-announcement-body" t-out="m['body']"/>
+                                        </div>
+                                    </article>
+                                </t>
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <div class="wb-empty">
+                                <i class="fa fa-comments-o"/>
+                                <p>No details or replies on this ticket yet.</p>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_wb_notification_user,WB Notification (internal users),model_wb_notification,base.group_user,1,0,0,0
+access_wb_loan_user,WB Loan (internal users),model_wb_loan,base.group_user,1,0,0,0
+access_wb_loan_manager,WB Loan (HR managers),model_wb_loan,hr.group_hr_manager,1,1,1,1

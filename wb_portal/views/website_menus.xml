@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Top level portal menu -->
+    <record id="menu_hr_portal" model="website.menu">
+        <field name="name">My HR Portal</field>
+        <field name="url">/home/</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="menu_hr_dashboard" model="website.menu">
+        <field name="name">Dashboard</field>
+        <field name="url">/home/</field>
+        <field name="parent_id" ref="wb_portal.menu_hr_portal"/>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="menu_hr_attendance" model="website.menu">
+        <field name="name">Attendance</field>
+        <field name="url">/attendance/</field>
+        <field name="parent_id" ref="wb_portal.menu_hr_portal"/>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="menu_hr_payslips" model="website.menu">
+        <field name="name">Payslips</field>
+        <field name="url">/payslip/</field>
+        <field name="parent_id" ref="wb_portal.menu_hr_portal"/>
+        <field name="sequence">30</field>
+    </record>
+
+    <record id="menu_hr_leaves" model="website.menu">
+        <field name="name">Time Off</field>
+        <field name="url">/leaveview/</field>
+        <field name="parent_id" ref="wb_portal.menu_hr_portal"/>
+        <field name="sequence">40</field>
+    </record>
+
+    <record id="menu_hr_documents" model="website.menu">
+        <field name="name">Documents</field>
+        <field name="url">/documents/</field>
+        <field name="parent_id" ref="wb_portal.menu_hr_portal"/>
+        <field name="sequence">50</field>
+    </record>
+</odoo>

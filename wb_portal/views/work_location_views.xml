@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_work_location_form_inherit_geo" model="ir.ui.view">
+        <field name="name">hr.work.location.form.inherit.wb.geo</field>
+        <field name="model">hr.work.location</field>
+        <field name="inherit_id" ref="hr.hr_work_location_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[2]" position="inside">
+                <group name="wb_geo" string="Portal Geolocation Check">
+                    <field name="geo_enforced"/>
+                    <field name="latitude" widget="float"/>
+                    <field name="longitude" widget="float"/>
+                    <field name="geo_radius"/>
+                    <field name="geo_configured" readonly="1" invisible="1"/>
+                    <field name="geo_map_url" readonly="1" string="Map" widget="url"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_work_location_tree_inherit_geo" model="ir.ui.view">
+        <field name="name">hr.work.location.tree.inherit.wb.geo</field>
+        <field name="model">hr.work.location</field>
+        <field name="inherit_id" ref="hr.hr_work_location_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list/field[@name='location_type']" position="after">
+                <field name="latitude" optional="show"/>
+                <field name="longitude" optional="show"/>
+                <field name="geo_radius" optional="show"/>
+                <field name="geo_enforced" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
