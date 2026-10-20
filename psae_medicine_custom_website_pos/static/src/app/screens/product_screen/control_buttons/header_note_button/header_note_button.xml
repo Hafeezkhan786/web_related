@@ -1,0 +1,8 @@
+<templates id="template" xml:space="preserve">
+    <t t-name="psae_medicine_custom_website_pos.HeaderNoteButton">
+        <button class="btn btn-secondary btn-lg lh-lg text-truncate w-auto" t-on-click="click">
+            <i class="fa fa-sticky-note me-1" role="img" aria-label="Header Note" title="Header Note" />
+            <span>Receipt</span>
+        </button>
+    </t>
+</templates>

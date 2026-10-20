@@ -1,0 +1,6 @@
+<odoo noupdate="1">
+    <record id="group_allow_negative_sale" model="res.groups">
+        <field name="name">Allow Negative Quantity on Sale</field>
+        <field name="comment">Allows the user to by-pass blocking negative quantity in Sale Orders.</field>
+    </record>
+</odoo>

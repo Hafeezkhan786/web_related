@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- POS Order Form View -->
+        <record id="view_pos_order_form_fbr" model="ir.ui.view">
+            <field name="name">pos.order.form.fbr</field>
+            <field name="model">pos.order</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='notes']" position="after">
+                    <page string="FBR">
+                        <group string="FBR Information" name="fbr_info">
+                            <field name="fbr_status" readonly="1"/>
+                            <field name="fbr_invoice_number" readonly="1"/>
+                            <field name="fbr_response" readonly="1"/>
+                            <field name="fbr_payload" readonly="1"/>
+
+                            <field name="fbr_error_message" readonly="1"
+                                   invisible="fbr_error_message == ''"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- POS Order List View -->
+        <record id="view_pos_order_tree_fbr" model="ir.ui.view">
+            <field name="name">pos.order.tree.fbr</field>
+            <field name="model">pos.order</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_order_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='amount_total']" position="after">
+                    <field name="fbr_status"/>
+                    <field name="fbr_invoice_number"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Add Retry FBR Button -->
+        <record id="view_pos_order_form_fbr_buttons" model="ir.ui.view">
+            <field name="name">pos.order.form.fbr.buttons</field>
+            <field name="model">pos.order</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_pos_order_invoice']" position="after">
+                    <button name="action_retry_fbr_post"
+                            type="object"
+                            string="Post To FBR"
+                            invisible="fbr_status == 'posted'"
+                            class="oe_highlight"/>
+                    <button name="action_print_fbr_receipt"
+                            type="object"
+                            string="Print FBR Receipt"
+                            invisible="fbr_status != 'posted'"
+                            class="oe_highlight"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Server Action for Manual Post to FBR -->
+        <record id="action_server_post_to_fbr" model="ir.actions.server">
+            <field name="name">Post To FBR</field>
+            <field name="model_id" ref="point_of_sale.model_pos_order"/>
+            <field name="binding_model_id" ref="point_of_sale.model_pos_order"/>
+            <field name="binding_view_types">list,form</field>
+            <field name="state">code</field>
+            <field name="code">
+                action = records.action_retry_fbr_post()
+            </field>
+        </record>
+    </data>
+</odoo>

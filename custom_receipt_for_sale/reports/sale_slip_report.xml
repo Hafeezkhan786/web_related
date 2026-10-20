@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Paper Format for Sale Slip (58mm EPSON TM-m10 thermal receipt) -->
+        <record id="paperformat_sale_slip" model="report.paperformat">
+            <field name="name">Sale Slip Paper Format</field>
+            <field name="default">False</field>
+            <field name="format">custom</field>
+            <field name="page_height">150</field>
+            <field name="page_width">58</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">2</field>
+            <field name="margin_bottom">2</field>
+            <field name="margin_left">2</field>
+            <field name="margin_right">2</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">96</field>
+        </record>
+
+        <!-- Paper Format for Blank Slip (58mm thermal receipt without header/footer) -->
+        <record id="paperformat_blank_slip" model="report.paperformat">
+            <field name="name">Blank Slip Paper Format</field>
+            <field name="default">False</field>
+            <field name="format">custom</field>
+            <field name="page_height">100</field>
+            <field name="page_width">58</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">2</field>
+            <field name="margin_bottom">2</field>
+            <field name="margin_left">2</field>
+            <field name="margin_right">2</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">96</field>
+        </record>
+
+        <!-- QWeb Template for Sale Slip -->
+        <template id="report_sale_slip">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="dummy" t-value="doc.change_size_page()"/>
+                    <div class="page" style="
+                        font-family: Arial, sans-serif;
+                        font-size: 13px;
+                        color: #000 !important;
+                        line-height: 1.3;
+                        width: 54mm;
+                        max-width: 54mm;
+                        margin: 0 auto;
+                        padding: 0;
+                    ">
+                        <style>
+                            .page, .page * {
+                                color: #000 !important;
+                            }
+                        </style>
+
+                        <!-- Logo Section -->
+                        <t t-if="doc.company_id.logo">
+                            <div style="text-align: center; margin-bottom: 2px;">
+                                <img t-att-src="image_data_uri(doc.company_id.logo)"
+                                     alt="Logo" style="max-width: 130px; height: auto; display: inline-block; object-fit: contain;"/>
+                            </div>
+                        </t>
+
+                        <!-- Heading -->
+                        <div style="font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Sale Slip
+                        </div>
+
+                        <!-- Company Header -->
+                        <div style="font-size: 13px; text-align: center; margin-bottom: 4px; line-height: 1.3;">
+                            <span style="font-size: 15px; font-weight: bold;"><t t-esc="doc.company_id.name"/></span><br/>
+                            Ph: <t t-esc="doc.company_id.phone or '+923337222221'"/><br/>
+                            WA: 03013345887 / 03210477759<br/>
+                            STRN# 3277876341689<br/>
+                            NTN# 9352512-0
+                        </div>
+
+                        <!-- Order Details -->
+                        <div style="font-size: 13px; text-align: center; border-top: 1px dashed #000; padding-top: 4px; margin-bottom: 4px; line-height: 1.3;">
+                            Doc# <t t-esc="doc.name"/><br/>
+                            Date: <span t-field="doc.date_order" t-options='{"widget": "datetime", "format": "dd-MM-yyyy HH:mm:ss"}'/><br/>
+                            User: <t t-esc="doc.user_id.name"/><br/>
+                            <t t-if="doc.partner_id">
+                                <span style="font-weight: bold;">Cust: <t t-esc="doc.partner_id.name"/></span><br/>
+                            </t>
+                            <t t-if="doc.client_order_ref">
+                                <span style="font-weight: bold;">Ph: <t t-esc="doc.client_order_ref"/></span><br/>
+                            </t>
+                            <t t-if="doc.partner_id.street">
+                                <t t-esc="doc.partner_id.street"/><br/>
+                            </t>
+                            <t t-if="doc.partner_id.street2">
+                                <t t-esc="doc.partner_id.street2"/><br/>
+                            </t>
+                            <t t-esc="doc.partner_id.city or ''"/>
+                            <t t-if="doc.partner_id.state_id">, <t t-esc="doc.partner_id.state_id.name"/></t>
+                            <t t-if="doc.team_id">
+                                <br/>Team: <t t-esc="doc.team_id.name"/>
+                            </t>
+                            <t t-set="source_medium" t-value="doc.get_source_medium_display()"/>
+                            <t t-if="source_medium">
+                                <br/><span style="font-weight: bold;">Source / Medium: <t t-esc="source_medium"/></span>
+                            </t>
+                        </div>
+
+                        <!-- Order Lines Table -->
+                        <table style="font-size: 13px; border-top: 1px double #000; border-bottom: 1px dashed #000; width: 100%; border-collapse: collapse; margin-bottom: 4px; line-height: 1.3;">
+                            <colgroup>
+                                <col style="width: 10%;"/>
+                                <col style="width: 52%;"/>
+                                <col style="width: 11%;"/>
+                                <col style="width: 27%;"/>
+                            </colgroup>
+                            <tr style="border-bottom: 1px dashed #000;">
+                                <th style="text-align: left; padding: 2px 0; font-size: 13px; font-weight: bold;">Qty</th>
+                                <th style="text-align: left; padding: 2px 0; font-size: 13px; font-weight: bold;">Product</th>
+                                <th style="text-align: center; padding: 2px 0; font-size: 13px; font-weight: bold;">Dis</th>
+                                <th style="text-align: right; padding: 2px 0; font-size: 13px; font-weight: bold;">Amt</th>
+                            </tr>
+                            <t t-foreach="doc.order_line" t-as="line">
+                                <t t-if="not line.display_type">
+                                    <tr style="border-bottom: 1px dashed #000; vertical-align: top;">
+                                        <td style="padding: 2px 0; text-align: left; font-size: 13px; color: #000;">
+                                            <t t-esc="int(line.product_uom_qty) if line.product_uom_qty.is_integer() else line.product_uom_qty"/>
+                                        </td>
+                                        <td style="padding: 2px 0; text-align: left; color: #000;">
+                                            <div style="line-height: 1.3; font-size: 13px; word-break: break-word; color: #000;">
+                                                <t t-esc="line.product_id.name"/>
+                                            </div>
+                                            <div style="font-size: 11px; color: #000; line-height: 1.2; margin-top: 1px;">
+                                                <t t-if="line.discount &gt; 0">
+                                                    <span style="text-decoration: line-through; color: #000;">
+                                                        <t t-esc="doc.format_amount(line.price_unit)"/>
+                                                    </span>
+                                                    <t t-esc="doc.format_amount(line.price_unit * (1 - line.discount / 100.0))"/> Rs/<t t-esc="line.product_uom_id.name"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <t t-esc="doc.format_amount(line.price_unit)"/> Rs/<t t-esc="line.product_uom_id.name"/>
+                                                </t>
+                                            </div>
+                                            <t t-set="line_desc" t-value="line.get_line_description()"/>
+                                            <t t-if="line_desc">
+                                                <div style="font-size: 10px; font-style: italic; color: #000; line-height: 1.2; margin-top: 1px; word-break: break-word;">
+                                                    <t t-esc="line_desc"/>
+                                                </div>
+                                            </t>
+                                        </td>
+                                        <td style="padding: 2px 0; text-align: center; font-size: 11px; font-weight: bold; color: #000; vertical-align: top;">
+                                            <t t-if="line.discount &gt; 0">
+                                                (<t t-esc="int(line.discount) if line.discount.is_integer() else line.discount"/>%)
+                                            </t>
+                                        </td>
+                                        <td style="padding: 2px 0; text-align: right; font-size: 13px;">
+                                            <t t-esc="doc.format_amount(line.price_subtotal)"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </table>
+
+                        <!-- Totals Section -->
+                        <div style="padding-top: 2px; font-size: 13px; line-height: 1.3;">
+                            <t t-set="gross_total" t-value="sum(line.price_total / (1.0 - (line.discount / 100.0)) if (line.discount &gt; 0 and line.discount &lt; 100) else (line.price_unit * line.product_uom_qty if line.discount == 100 else line.price_total) for line in doc.order_line if not line.display_type)"/>
+                            <t t-set="total_discount" t-value="sum((line.price_total / (1.0 - (line.discount / 100.0)) - line.price_total) if (line.discount &gt; 0 and line.discount &lt; 100) else (line.price_unit * line.product_uom_qty if line.discount == 100 else 0.0) for line in doc.order_line if not line.display_type)"/>
+
+                            <div style="font-size: 13px; border-top: 1px dashed #000; padding-top: 2px; margin-bottom: 2px; overflow: hidden;">
+                                <span style="float: left; margin-left: 20%;">GROSS TOTAL:</span>
+                                <span style="float: right;"><t t-esc="doc.format_amount(gross_total)"/></span>
+                                <div style="clear: both;"/>
+                            </div>
+                            <t t-if="total_discount &gt; 0">
+                                <div style="font-size: 13px; margin-bottom: 2px; overflow: hidden;">
+                                    <span style="float: left; margin-left: 20%;">Discounts:</span>
+                                    <span style="float: right;"><t t-esc="doc.format_amount(total_discount)"/></span>
+                                    <div style="clear: both;"/>
+                                </div>
+                            </t>
+                            <div style="font-weight: bold; font-size: 15px; border-top: 1px dashed #000; padding-top: 3px; margin-bottom: 3px; overflow: hidden;">
+                                <span style="float: left; margin-left: 20%;">GRAND TOTAL:</span>
+                                <span style="float: right;"><t t-esc="doc.format_amount(doc.amount_total)"/></span>
+                                <div style="clear: both;"/>
+                            </div>
+                        </div>
+
+                        <!-- Payment Information Section -->
+                        <t t-set="pay_info" t-value="doc.get_payment_info()"/>
+                        <t t-if="pay_info['payment_method'] or pay_info['online_payment_method']">
+                            <div style="font-size: 11px; border-top: 1px dashed #000; padding-top: 2px; margin-top: 2px; margin-bottom: 2px; line-height: 1.2;">
+                                <t t-if="pay_info['payment_method']">
+                                    <div style="overflow: hidden;">
+                                        <span style="float: left;">Payment Method:</span>
+                                        <span style="float: right; font-weight: bold;"><t t-esc="pay_info['payment_method']"/></span>
+                                        <div style="clear: both;"/>
+                                    </div>
+                                </t>
+                                <t t-if="pay_info['online_payment_method']">
+                                    <div style="overflow: hidden;">
+                                        <span style="float: left;">Online Payment:</span>
+                                        <span style="float: right; font-weight: bold;"><t t-esc="pay_info['online_payment_method']"/></span>
+                                        <div style="clear: both;"/>
+                                    </div>
+                                </t>
+                            </div>
+                        </t>
+
+                        <!-- Terms and Conditions Section -->
+                        <t t-if="doc.note">
+                            <div style="margin-top: 4px; text-align: left; padding: 3px 0; font-size: 11px; border-top: 1px dashed #000; line-height: 1.3;">
+                                <t t-out="doc.get_cleaned_note()"/>
+                            </div>
+                        </t>
+
+                        <!-- Separator Line before QR Code -->
+                        <div style="border-top: 1px dashed #000; margin-top: 8px; margin-bottom: 8px; clear: both;"/>
+
+                        <!-- Home Delivery QR Code Section -->
+                        <table style="width: 100%; border: none; border-collapse: collapse; margin-bottom: 6px;">
+                            <tr>
+                                <td style="width: 40%; text-align: right; padding-right: 8px; vertical-align: middle; border: none;">
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=50x50&amp;data=https://www.mrmedicinemart.com/"
+                                         style="width: 45px; height: 45px; display: inline-block; vertical-align: middle;"
+                                         alt="QR Code"/>
+                                </td>
+                                <td style="width: 60%; text-align: left; vertical-align: middle; font-size: 13px; font-weight: bold; line-height: 1.3; border: none;">
+                                    Home Delivery<br/>
+                                    Available
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Footer -->
+                        <div style="font-size: 13px; text-align: center; margin-top: 6px; border-top: 1px dashed #000; padding-top: 6px; margin-bottom: 4px; line-height: 1.3;">
+                            Thank You... Please Visit Again ...
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <!-- QWeb Template for Blank Slip (Only Cust to Grand Total) -->
+        <template id="report_blank_slip">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="dummy" t-value="doc.change_size_page_blank()"/>
+                    <div class="page" style="
+                        font-family: Arial, sans-serif;
+                        font-size: 13px;
+                        color: #000 !important;
+                        line-height: 1.3;
+                        width: 54mm;
+                        max-width: 54mm;
+                        margin: 0 auto;
+                        padding: 0;
+                    ">
+                        <style>
+                            .page, .page * {
+                                color: #000 !important;
+                            }
+                        </style>
+
+                        <!-- Customer & Address Details -->
+                        <div style="font-size: 13px; text-align: center; margin-bottom: 4px; line-height: 1.3;">
+                            <t t-if="doc.partner_id">
+                                <span style="font-weight: bold;">Cust: <t t-esc="doc.partner_id.name"/></span><br/>
+                            </t>
+                            <t t-if="doc.client_order_ref">
+                                <span style="font-weight: bold;">Ph: <t t-esc="doc.client_order_ref"/></span><br/>
+                            </t>
+                            <t t-if="doc.partner_id.street">
+                                <t t-esc="doc.partner_id.street"/><br/>
+                            </t>
+                            <t t-if="doc.partner_id.street2">
+                                <t t-esc="doc.partner_id.street2"/><br/>
+                            </t>
+                            <t t-esc="doc.partner_id.city or ''"/>
+                            <t t-if="doc.partner_id.state_id">, <t t-esc="doc.partner_id.state_id.name"/></t>
+                            <t t-if="doc.team_id">
+                                <br/>Team: <t t-esc="doc.team_id.name"/>
+                            </t>
+                            <t t-set="source_medium" t-value="doc.get_source_medium_display()"/>
+                            <t t-if="source_medium">
+                                <br/><span style="font-weight: bold;">Source / Medium: <t t-esc="source_medium"/></span>
+                            </t>
+                        </div>
+
+                        <!-- Order Lines Table -->
+                        <table style="font-size: 13px; border-top: 1px double #000; border-bottom: 1px dashed #000; width: 100%; border-collapse: collapse; margin-bottom: 4px; line-height: 1.3;">
+                            <colgroup>
+                                <col style="width: 10%;"/>
+                                <col style="width: 52%;"/>
+                                <col style="width: 11%;"/>
+                                <col style="width: 27%;"/>
+                            </colgroup>
+                            <tr style="border-bottom: 1px dashed #000;">
+                                <th style="text-align: left; padding: 2px 0; font-size: 13px; font-weight: bold;">Qty</th>
+                                <th style="text-align: left; padding: 2px 0; font-size: 13px; font-weight: bold;">Product</th>
+                                <th style="text-align: center; padding: 2px 0; font-size: 13px; font-weight: bold;">Dis</th>
+                                <th style="text-align: right; padding: 2px 0; font-size: 13px; font-weight: bold;">Amt</th>
+                            </tr>
+                            <t t-foreach="doc.order_line" t-as="line">
+                                <t t-if="not line.display_type">
+                                    <tr style="border-bottom: 1px dashed #000; vertical-align: top;">
+                                        <td style="padding: 2px 0; text-align: left; font-size: 13px; color: #000;">
+                                            <t t-esc="int(line.product_uom_qty) if line.product_uom_qty.is_integer() else line.product_uom_qty"/>
+                                        </td>
+                                        <td style="padding: 2px 0; text-align: left; color: #000;">
+                                            <div style="line-height: 1.3; font-size: 13px; word-break: break-word; color: #000;">
+                                                <t t-esc="line.product_id.name"/>
+                                            </div>
+                                            <div style="font-size: 11px; color: #000; line-height: 1.2; margin-top: 1px;">
+                                                <t t-if="line.discount &gt; 0">
+                                                    <span style="text-decoration: line-through; color: #000;">
+                                                        <t t-esc="doc.format_amount(line.price_unit)"/>
+                                                    </span>
+                                                    <t t-esc="doc.format_amount(line.price_unit * (1 - line.discount / 100.0))"/> Rs/<t t-esc="line.product_uom_id.name"/>
+                                                </t>
+                                                <t t-else="">
+                                                    <t t-esc="doc.format_amount(line.price_unit)"/> Rs/<t t-esc="line.product_uom_id.name"/>
+                                                </t>
+                                            </div>
+                                            <t t-set="line_desc" t-value="line.get_line_description()"/>
+                                            <t t-if="line_desc">
+                                                <div style="font-size: 10px; font-style: italic; color: #000; line-height: 1.2; margin-top: 1px; word-break: break-word;">
+                                                    <t t-esc="line_desc"/>
+                                                </div>
+                                            </t>
+                                        </td>
+                                        <td style="padding: 2px 0; text-align: center; font-size: 11px; font-weight: bold; color: #000; vertical-align: top;">
+                                            <t t-if="line.discount &gt; 0">
+                                                (<t t-esc="int(line.discount) if line.discount.is_integer() else line.discount"/>%)
+                                            </t>
+                                        </td>
+                                        <td style="padding: 2px 0; text-align: right; font-size: 13px;">
+                                            <t t-esc="doc.format_amount(line.price_subtotal)"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </table>
+
+                        <!-- Totals Section -->
+                        <div style="padding-top: 2px; font-size: 13px; line-height: 1.3;">
+                            <t t-set="gross_total" t-value="sum(line.price_total / (1.0 - (line.discount / 100.0)) if (line.discount &gt; 0 and line.discount &lt; 100) else (line.price_unit * line.product_uom_qty if line.discount == 100 else line.price_total) for line in doc.order_line if not line.display_type)"/>
+                            <t t-set="total_discount" t-value="sum((line.price_total / (1.0 - (line.discount / 100.0)) - line.price_total) if (line.discount &gt; 0 and line.discount &lt; 100) else (line.price_unit * line.product_uom_qty if line.discount == 100 else 0.0) for line in doc.order_line if not line.display_type)"/>
+
+                            <div style="font-size: 13px; border-top: 1px dashed #000; padding-top: 2px; margin-bottom: 2px; overflow: hidden;">
+                                <span style="float: left; margin-left: 20%;">GROSS TOTAL:</span>
+                                <span style="float: right;"><t t-esc="doc.format_amount(gross_total)"/></span>
+                                <div style="clear: both;"/>
+                            </div>
+                            <t t-if="total_discount &gt; 0">
+                                <div style="font-size: 13px; margin-bottom: 2px; overflow: hidden;">
+                                    <span style="float: left; margin-left: 20%;">Discounts:</span>
+                                    <span style="float: right;"><t t-esc="doc.format_amount(total_discount)"/></span>
+                                    <div style="clear: both;"/>
+                                </div>
+                            </t>
+                            <div style="font-weight: bold; font-size: 15px; border-top: 1px dashed #000; padding-top: 3px; margin-bottom: 3px; overflow: hidden;">
+                                <span style="float: left; margin-left: 20%;">GRAND TOTAL:</span>
+                                <span style="float: right;"><t t-esc="doc.format_amount(doc.amount_total)"/></span>
+                                <div style="clear: both;"/>
+                            </div>
+                        </div>
+
+                        <!-- Payment Information Section -->
+                        <t t-set="pay_info" t-value="doc.get_payment_info()"/>
+                        <t t-if="pay_info['payment_method'] or pay_info['online_payment_method']">
+                            <div style="font-size: 11px; border-top: 1px dashed #000; padding-top: 2px; margin-top: 2px; margin-bottom: 2px; line-height: 1.2;">
+                                <t t-if="pay_info['payment_method']">
+                                    <div style="overflow: hidden;">
+                                        <span style="float: left;">Payment Method:</span>
+                                        <span style="float: right; font-weight: bold;"><t t-esc="pay_info['payment_method']"/></span>
+                                        <div style="clear: both;"/>
+                                    </div>
+                                </t>
+                                <t t-if="pay_info['online_payment_method']">
+                                    <div style="overflow: hidden;">
+                                        <span style="float: left;">Online Payment:</span>
+                                        <span style="float: right; font-weight: bold;"><t t-esc="pay_info['online_payment_method']"/></span>
+                                        <div style="clear: both;"/>
+                                    </div>
+                                </t>
+                            </div>
+                        </t>
+
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <!-- Report Action for Sale Slip -->
+        <record id="action_report_sale_slip" model="ir.actions.report">
+            <field name="name">Sale Slip</field>
+            <field name="model">sale.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">custom_receipt_for_sale.report_sale_slip</field>
+            <field name="report_file">custom_receipt_for_sale.report_sale_slip</field>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="paperformat_sale_slip"/>
+        </record>
+
+        <!-- Report Action for Blank Slip -->
+        <record id="action_report_blank_slip" model="ir.actions.report">
+            <field name="name">Blank Slip</field>
+            <field name="model">sale.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">custom_receipt_for_sale.report_blank_slip</field>
+            <field name="report_file">custom_receipt_for_sale.report_blank_slip</field>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="paperformat_blank_slip"/>
+        </record>
+    </data>
+</odoo>

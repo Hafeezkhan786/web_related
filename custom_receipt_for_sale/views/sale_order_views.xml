@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add Sale Slip Button to Sale Order / Quotation Form Header -->
+    <record id="view_order_form_inherit_sale_slip" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.sale.slip</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <xpath expr="//header/field[@name='state']" position="before">
+                <button name="action_print_sale_slip"
+                        string="Sale Slip"
+                        type="object"
+                        class="btn-secondary"
+                        icon="fa-print"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

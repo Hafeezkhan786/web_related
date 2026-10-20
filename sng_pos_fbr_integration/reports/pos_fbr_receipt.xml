@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- FBR Receipt Report Template -->
+        <template id="fbr_pos_receipt_template">
+            <t t-call="web.external_layout">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <div class="page" style="font-family: Arial; font-size: 12px; width: 300px; margin: 0 auto;">
+                        <!-- Company Header -->
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <h3 style="margin: 0;">
+                                <t t-esc="doc.company_id.name"/>
+                            </h3>
+                            <p style="margin: 5px 0;">
+                                <t t-esc="doc.company_id.street or ''"/>
+                                <br/>
+                                <t t-esc="doc.company_id.city or ''"/>
+                                <br/>
+                                Phone:
+                                <t t-esc="doc.company_id.phone or ''"/>
+                            </p>
+                        </div>
+
+                        <!-- Order Information -->
+                        <div style="margin-bottom: 20px;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <tr>
+                                    <td style="padding: 5px;">
+                                        <strong>Order #:</strong>
+                                    </td>
+                                    <td style="padding: 5px; text-align: right;">
+                                        <t t-esc="doc.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px;">
+                                        <strong>Date:</strong>
+                                    </td>
+                                    <td style="padding: 5px; text-align: right;">
+                                        <t t-esc="doc.date_order.strftime('%Y-%m-%d %H:%M:%S')"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px;">
+                                        <strong>Customer:</strong>
+                                    </td>
+                                    <td style="padding: 5px; text-align: right;">
+                                        <t t-esc="doc.partner_id.name or 'Walking Customer'"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- Order Lines -->
+                        <div style="margin-bottom: 20px;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="border-bottom: 1px solid #000;">
+                                        <th style="padding: 5px; text-align: left;">Product</th>
+                                        <th style="padding: 5px; text-align: right;">Qty</th>
+                                        <th style="padding: 5px; text-align: right;">Price</th>
+                                        <th style="padding: 5px; text-align: right;">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="doc.lines" t-as="line">
+                                        <tr style="border-bottom: 1px dashed #ccc;">
+                                            <td style="padding: 5px;">
+                                                <t t-esc="line.product_id.name"/>
+                                            </td>
+                                            <td style="padding: 5px; text-align: right;">
+                                                <t t-esc="'%.2f' % line.qty"/>
+                                            </td>
+                                            <td style="padding: 5px; text-align: right;">
+                                                <t t-esc="'%.2f' % line.price_unit"/>
+                                            </td>
+                                            <td style="padding: 5px; text-align: right;">
+                                                <t t-esc="'%.2f' % line.price_subtotal_incl"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Totals -->
+                        <div style="margin-bottom: 20px;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <tr>
+                                    <td style="padding: 5px;">
+                                        <strong>Subtotal:</strong>
+                                    </td>
+                                    <td style="padding: 5px; text-align: right;">
+                                        <t t-esc="'%.2f' % (doc.amount_total - doc.amount_tax)"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px;">
+                                        <strong>Tax:</strong>
+                                    </td>
+                                    <td style="padding: 5px; text-align: right;">
+                                        <t t-esc="'%.2f' % doc.amount_tax"/>
+                                    </td>
+                                </tr>
+                                <tr style="border-top: 2px solid #000; font-weight: bold;">
+                                    <td style="padding: 5px;">
+                                        <strong>Total:</strong>
+                                    </td>
+                                    <td style="padding: 5px; text-align: right;">
+                                        <t t-esc="'%.2f' % doc.amount_total"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- FBR Information Section -->
+                        <div t-if="doc.fbr_status == 'posted' and doc.fbr_invoice_number"
+                             style="margin-top: 20px; text-align: center; border-top: 1px dashed #ccc; padding-top: 15px;">
+                            <div style="font-weight: bold; font-size: 14px; margin-bottom: 10px;">
+                                FBR INVOICE INFORMATION
+                            </div>
+
+                            <!-- FBR Logo and Invoice Number -->
+                            <div style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                                <!-- FBR Logo -->
+                                <div style="text-align: center; padding: 8px; background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                    <img src="/sng_pos_fbr_integration/static/img/fbr_logo.png" style="height: 50px; width: 50px; object-fit: contain;"/>
+                                </div>
+
+                                <!-- Invoice Number -->
+                                <div style="text-align: center; flex: 1;">
+                                    <div style="font-size: 10px; color: #6c757d; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px;">Invoice Number</div>
+                                    <div style="font-size: 16px; font-weight: bold; color: #212529; font-family: 'Courier New', monospace; margin-bottom: 3px;">
+                                        <t t-esc="doc.fbr_invoice_number"/>
+                                    </div>
+                                    <div style="font-size: 8px; color: #28a745; font-weight: 500;">
+                                        * Verified by FBR
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- QR Code for verification -->
+                            <div t-if="doc.fbr_invoice_number" style="text-align: center; margin-top: 15px;">
+                                <div style="display: inline-block; padding: 8px; background: white; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+                                    <img t-attf-src="https://api.qrserver.com/v1/create-qr-code/?size=60x60&amp;data={{doc.fbr_invoice_number}}"
+                                         style="width: 60px; height: 60px; display: block;"
+                                         alt="FBR QR Code"/>
+                                </div>
+                                <div style="font-size: 8px; color: #6c757d; margin-top: 5px; font-weight: 500;">
+                                    Scan to verify invoice
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Footer -->
+                        <div style="text-align: center; margin-top: 20px; padding-top: 10px; border-top: 1px solid #ccc;">
+                            <p style="margin: 5px 0; font-size: 10px;">
+                                Thank you for your purchase!
+                            </p>
+                        </div>
+                    </div>
+                </t>
+            </t>
+            </t>
+        </template>
+
+        <!-- FBR Receipt Report Action -->
+        <record id="fbr_pos_receipt_action" model="ir.actions.report">
+            <field name="name">FBR Receipt</field>
+            <field name="model">pos.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">sng_pos_fbr_integration.fbr_pos_receipt_template</field>
+            <field name="report_file">FBR_Receipt</field>
+            <field name="binding_model_id" ref="point_of_sale.model_pos_order"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <!-- FBR Receipt Paper Format -->
+        <record id="paperformat_pos_fbr_receipt" model="report.paperformat">
+            <field name="name">FBR Receipt Paper Format</field>
+            <field name="default">True</field>
+            <field name="format">custom</field>
+            <field name="page_height">150</field>
+            <field name="page_width">72</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">2</field>
+            <field name="margin_bottom">2</field>
+            <field name="margin_left">2</field>
+            <field name="margin_right">2</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record>
+
+    </data>
+</odoo>

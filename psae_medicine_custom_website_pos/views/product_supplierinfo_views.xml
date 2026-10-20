@@ -1,0 +1,18 @@
+<odoo>
+    <!-- Vendor pricelist tweaks (replaces a Studio inline-list dump). Inherits the
+         base product list view to stay purchase-independent; still reaches the
+         Purchase tab as that view resolves the base first. -->
+    <record id="product_supplierinfo_tree_view" model="ir.ui.view">
+        <field name="name">product.supplierinfo.tree.view.inherit.psae.medicine.custom.website.pos</field>
+        <field name="model">product.supplierinfo</field>
+        <field name="inherit_id" ref="product.product_supplierinfo_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="attributes">
+                <attribute name="options">{'no_create': True}</attribute>
+            </field>
+            <field name="price" position="attributes">
+                <attribute name="string">Price</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,11 @@
+<templates id="template" xml:space="preserve">
+    <t t-name="psae_medicine_custom_website_pos.ReceiptHeader" t-inherit="point_of_sale.ReceiptHeader" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('pos-receipt-customer')]" position="after">
+            <t t-if="order.header_note">
+                <div class="pos-receipt-left-align my-2 fw-bold">
+                    <t t-out="order.header_note" />
+                </div>
+            </t>
+        </xpath>
+    </t>
+</templates>

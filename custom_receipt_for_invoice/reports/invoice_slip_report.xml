@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Paper Format for Invoice Slip (58mm EPSON TM-m10 thermal receipt) -->
+        <record id="paperformat_invoice_slip" model="report.paperformat">
+            <field name="name">Invoice Slip Paper Format</field>
+            <field name="default">False</field>
+            <field name="format">custom</field>
+            <field name="page_height">150</field>
+            <field name="page_width">58</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">2</field>
+            <field name="margin_bottom">2</field>
+            <field name="margin_left">2</field>
+            <field name="margin_right">2</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">96</field>
+        </record>
+
+        <!-- QWeb Template for Invoice Slip -->
+        <template id="report_invoice_slip">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="dummy" t-value="doc.change_size_page()"/>
+                    <div class="page" style="
+                        font-family: Arial, sans-serif;
+                        font-size: 13px;
+                        color: #000 !important;
+                        line-height: 1.3;
+                        width: 54mm;
+                        max-width: 54mm;
+                        margin: 0 auto;
+                        padding: 0;
+                    ">
+                        <style>
+                            .page, .page * {
+                                color: #000 !important;
+                            }
+                        </style>
+
+                        <!-- Logo Section -->
+                        <t t-if="doc.company_id.logo">
+                            <div style="text-align: center; margin-bottom: 2px;">
+                                <img t-att-src="image_data_uri(doc.company_id.logo)"
+                                     alt="Logo" style="max-width: 130px; height: auto; display: inline-block; object-fit: contain;"/>
+                            </div>
+                        </t>
+
+                        <!-- Heading -->
+                        <div style="font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Invoice Slip
+                        </div>
+
+                        <!-- Company Header -->
+                        <div style="font-size: 13px; text-align: center; margin-bottom: 4px; line-height: 1.3;">
+                            <span style="font-size: 15px; font-weight: bold;"><t t-esc="doc.company_id.name"/></span><br/>
+                            Ph: <t t-esc="doc.company_id.phone or '+923337222221'"/><br/>
+                            WA: 0321-0477759 / 0301-3345887<br/>
+                            STRN# 3277876341689<br/>
+                            NTN# 9352512-0
+                        </div>
+
+                        <!-- Header Information Section -->
+                        <div style="font-size: 13px; text-align: center; border-top: 1px dashed #000; padding-top: 4px; margin-bottom: 4px; line-height: 1.3;">
+                            <span style="font-weight: bold;">Invoice Number:</span> <t t-esc="doc.name"/><br/>
+                            <t t-set="so_ref" t-value="doc.get_sales_order_ref()"/>
+                            <t t-if="so_ref">
+                                <span style="font-weight: bold;">Sales Order Number:</span> <t t-esc="so_ref"/><br/>
+                            </t>
+                            <t t-if="doc.ref and doc.ref != so_ref and doc.ref != doc.name">
+                                <span style="font-weight: bold;">Customer Reference:</span> <t t-esc="doc.ref"/><br/>
+                            </t>
+                            <t t-if="doc.payment_reference and doc.payment_reference != doc.name and doc.payment_reference != doc.ref and doc.payment_reference != so_ref">
+                                <span style="font-weight: bold;">Payment Reference number:</span> <t t-esc="doc.payment_reference"/><br/>
+                            </t>
+                            <span style="font-weight: bold;">Invoice Date &amp; Time:</span> <t t-esc="doc.get_invoice_datetime_display()"/><br/>
+                            <t t-if="doc.team_id">
+                                <span style="font-weight: bold;">Sale Team:</span> <t t-esc="doc.team_id.name"/><br/>
+                            </t>
+                            <t t-set="salesperson" t-value="doc.invoice_user_id.name if doc.invoice_user_id else (doc.user_id.name if doc.user_id else '')"/>
+                            <t t-if="salesperson">
+                                <span style="font-weight: bold;">Salesperson:</span> <t t-esc="salesperson"/><br/>
+                            </t>
+                        </div>
+
+                        <!-- Customer Information Section -->
+                        <div style="font-size: 13px; text-align: center; border-top: 1px dashed #000; padding-top: 4px; margin-bottom: 4px; line-height: 1.3;">
+                            <t t-set="cust_info" t-value="doc.get_customer_display_info()"/>
+                            <t t-if="cust_info['customer_name']">
+                                <span style="font-weight: bold;">Customer Name:</span> <t t-esc="cust_info['customer_name']"/><br/>
+                            </t>
+                            <t t-if="cust_info['contact_person']">
+                                <span style="font-weight: bold;">Contact Person:</span> <t t-esc="cust_info['contact_person']"/><br/>
+                            </t>
+                            <t t-set="billing_addr" t-value="doc.get_formatted_billing_address()"/>
+                            <t t-if="billing_addr">
+                                <span style="font-weight: bold;">Billing Address:</span> <t t-esc="billing_addr"/><br/>
+                            </t>
+                            <t t-if="cust_info['phone']">
+                                <span style="font-weight: bold;">Ph:</span> <t t-esc="cust_info['phone']"/><br/>
+                            </t>
+                        </div>
+
+                        <!-- Invoice Lines Table -->
+                        <table style="font-size: 13px; border-top: 1px double #000; border-bottom: 1px dashed #000; width: 100%; border-collapse: collapse; margin-bottom: 4px; line-height: 1.3;">
+                            <colgroup>
+                                <col style="width: 10%;"/>
+                                <col style="width: 48%;"/>
+                                <col style="width: 12%;"/>
+                                <col style="width: 30%;"/>
+                            </colgroup>
+                            <thead>
+                                <tr style="border-bottom: 1px dashed #000;">
+                                    <th style="width: 10%; text-align: left; padding: 2px 0; font-size: 13px; font-weight: bold;">Qty</th>
+                                    <th style="width: 48%; text-align: left; padding: 2px 0; font-size: 13px; font-weight: bold;">Product</th>
+                                    <th style="width: 12%; text-align: center; padding: 2px 0; font-size: 13px; font-weight: bold;">Dis</th>
+                                    <th style="width: 30%; text-align: right; padding: 2px 0; font-size: 13px; font-weight: bold;">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.invoice_line_ids" t-as="line">
+                                    <t t-if="(not line.display_type or line.display_type == 'product') and line.product_id">
+                                        <tr style="border-bottom: 1px dashed #000; vertical-align: top;">
+                                            <td style="padding: 2px 0; text-align: left; font-size: 13px; color: #000;">
+                                                <t t-esc="int(line.quantity) if line.quantity.is_integer() else line.quantity"/>
+                                            </td>
+                                            <td style="padding: 2px 0; text-align: left; color: #000;">
+                                                <div style="line-height: 1.3; font-size: 13px; word-break: break-word; color: #000;">
+                                                    <t t-esc="line.product_id.name"/>
+                                                </div>
+                                                <div style="font-size: 11px; color: #000; line-height: 1.2; margin-top: 1px;">
+                                                    <t t-if="line.discount &gt; 0">
+                                                        <span style="text-decoration: line-through; color: #000;">
+                                                            <t t-esc="doc.format_amount(line.price_unit)"/>
+                                                        </span>
+                                                        <t t-esc="doc.format_amount(line.price_unit * (1 - line.discount / 100.0))"/> Rs/<t t-esc="line.product_uom_id.name"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <t t-esc="doc.format_amount(line.price_unit)"/> Rs/<t t-esc="line.product_uom_id.name"/>
+                                                    </t>
+                                                </div>
+                                                <t t-set="line_desc" t-value="line.get_line_description()"/>
+                                                <t t-if="line_desc">
+                                                    <div style="font-size: 10px; font-style: italic; color: #000; line-height: 1.2; margin-top: 1px; word-break: break-word;">
+                                                        <t t-esc="line_desc"/>
+                                                    </div>
+                                                </t>
+                                            </td>
+                                            <td style="padding: 2px 0; text-align: center; font-size: 11px; font-weight: bold; color: #000; vertical-align: top;">
+                                                <t t-if="line.discount &gt; 0">
+                                                    (<t t-esc="int(line.discount) if line.discount.is_integer() else line.discount"/>%)
+                                                </t>
+                                            </td>
+                                            <td style="padding: 2px 0; text-align: right; font-size: 13px;">
+                                                <t t-esc="doc.format_amount(line.price_subtotal)"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <!-- Totals Section -->
+                        <div style="padding-top: 2px; font-size: 13px; line-height: 1.3;">
+                            <t t-set="valid_lines" t-value="[l for l in doc.invoice_line_ids if (not l.display_type or l.display_type == 'product') and l.product_id]"/>
+                            <t t-set="gross_total" t-value="sum((l.price_unit * l.quantity) if l.discount &gt; 0 else l.price_subtotal for l in valid_lines) if valid_lines else doc.amount_untaxed"/>
+                            <t t-set="total_discount" t-value="sum(((l.price_unit * l.quantity) - l.price_subtotal) for l in valid_lines if l.discount &gt; 0) if valid_lines else 0.0"/>
+
+                            <div style="font-size: 13px; border-top: 1px dashed #000; padding-top: 2px; margin-bottom: 2px; overflow: hidden;">
+                                <span style="float: left; margin-left: 20%;">GROSS TOTAL:</span>
+                                <span style="float: right;"><t t-esc="doc.format_amount(gross_total)"/></span>
+                                <div style="clear: both;"/>
+                            </div>
+                            <t t-if="total_discount &gt; 0">
+                                <div style="font-size: 13px; margin-bottom: 2px; overflow: hidden;">
+                                    <span style="float: left; margin-left: 20%;">Discounts:</span>
+                                    <span style="float: right;"><t t-esc="doc.format_amount(total_discount)"/></span>
+                                    <div style="clear: both;"/>
+                                </div>
+                            </t>
+                            <t t-if="doc.amount_tax and doc.amount_tax &gt; 0">
+                                <div style="font-size: 13px; margin-bottom: 2px; overflow: hidden;">
+                                    <span style="float: left; margin-left: 20%;">Taxes:</span>
+                                    <span style="float: right;"><t t-esc="doc.format_amount(doc.amount_tax)"/></span>
+                                    <div style="clear: both;"/>
+                                </div>
+                            </t>
+                            <div style="font-weight: bold; font-size: 15px; border-top: 1px dashed #000; padding-top: 3px; margin-bottom: 3px; overflow: hidden;">
+                                <span style="float: left; margin-left: 20%;">GRAND TOTAL:</span>
+                                <span style="float: right;"><t t-esc="doc.format_amount(doc.amount_total)"/></span>
+                                <div style="clear: both;"/>
+                            </div>
+
+                            <!-- Payment Status Display (below Total Payable Amount) -->
+                            <t t-set="pay_status" t-value="doc.get_payment_status_display()"/>
+                            <div style="border-top: 1px dashed #000; border-bottom: 1px dashed #000; padding: 3px 0; margin-top: 3px; margin-bottom: 3px; text-align: center; font-weight: bold; font-size: 14px; letter-spacing: 0.5px;">
+                                PAYMENT STATUS: <t t-esc="pay_status"/>
+                            </div>
+
+                            <!-- Due Amount -->
+                            <div style="font-size: 13px; margin-bottom: 2px; overflow: hidden;">
+                                <span style="float: left; margin-left: 20%;">Due Amount:</span>
+                                <span style="float: right; font-weight: bold;"><t t-esc="doc.format_amount(doc.amount_residual)"/></span>
+                                <div style="clear: both;"/>
+                            </div>
+                        </div>
+
+                        <!-- Payment Terms Section -->
+                        <t t-if="doc.invoice_payment_term_id">
+                            <div style="font-size: 11px; border-top: 1px dashed #000; padding-top: 2px; margin-top: 2px; margin-bottom: 2px; line-height: 1.2;">
+                                <div style="overflow: hidden;">
+                                    <span style="float: left;">Payment Terms:</span>
+                                    <span style="float: right; font-weight: bold;"><t t-esc="doc.invoice_payment_term_id.name"/></span>
+                                    <div style="clear: both;"/>
+                                </div>
+                            </div>
+                        </t>
+
+                        <!-- Terms and Conditions Section -->
+                        <t t-if="doc.narration">
+                            <div style="margin-top: 4px; text-align: left; padding: 3px 0; font-size: 11px; border-top: 1px dashed #000; line-height: 1.3;">
+                                <div style="font-weight: bold; margin-bottom: 2px;">Terms and Conditions:</div>
+                                <t t-out="doc.get_cleaned_note()"/>
+                            </div>
+                        </t>
+
+                        <!-- Separator Line before QR Code -->
+                        <div style="border-top: 1px dashed #000; margin-top: 8px; margin-bottom: 8px; clear: both;"/>
+
+                        <!-- Home Delivery QR Code Section -->
+                        <table style="width: 100%; border: none; border-collapse: collapse; margin-bottom: 6px;">
+                            <tr>
+                                <td style="width: 40%; text-align: right; padding-right: 8px; vertical-align: middle; border: none;">
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=50x50&amp;data=https://www.mrmedicinemart.com/"
+                                         style="width: 45px; height: 45px; display: inline-block; vertical-align: middle;"
+                                         alt="QR Code"/>
+                                </td>
+                                <td style="width: 60%; text-align: left; vertical-align: middle; font-size: 13px; font-weight: bold; line-height: 1.3; border: none;">
+                                    Home Delivery<br/>
+                                    Available
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Footer -->
+                        <div style="font-size: 13px; text-align: center; margin-top: 6px; border-top: 1px dashed #000; padding-top: 6px; margin-bottom: 4px; line-height: 1.3;">
+                            Thank You... Please Visit Again ...
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <!-- Report Action for Invoice Slip -->
+        <record id="action_report_invoice_slip" model="ir.actions.report">
+            <field name="name">Invoice Slip</field>
+            <field name="model">account.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">custom_receipt_for_invoice.report_invoice_slip</field>
+            <field name="report_file">custom_receipt_for_invoice.report_invoice_slip</field>
+            <field name="binding_model_id" ref="account.model_account_move"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="paperformat_invoice_slip"/>
+        </record>
+    </data>
+</odoo>

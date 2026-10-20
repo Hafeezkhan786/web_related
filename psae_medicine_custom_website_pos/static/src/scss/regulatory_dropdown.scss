@@ -1,0 +1,86 @@
+/* ==========================================================================
+   Regulatory Restrictions Button & Hover Effect
+   ========================================================================== */
+
+.drap_regulatory_dropdown {
+    summary.btn_regulatory_toggle {
+        list-style: none !important;
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.55rem 1.1rem;
+        background: linear-gradient(135deg, #fffcf0 0%, #fff6d6 100%);
+        border: 1.5px solid #f59e0b;
+        border-radius: 8px;
+        color: #78350f;
+        font-size: 0.925rem;
+        font-weight: 600;
+        cursor: pointer !important;
+        user-select: none;
+        box-shadow: 0 2px 5px rgba(245, 158, 11, 0.12);
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &::-webkit-details-marker {
+            display: none !important;
+        }
+
+        .warning-icon {
+            font-size: 1.05rem;
+            color: #d97706;
+            transition: transform 0.25s ease;
+        }
+
+        .dropdown-arrow-icon {
+            font-size: 0.825rem;
+            color: #b45309;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Hover Effect — Gives clear interactive button feel */
+        &:hover {
+            background: linear-gradient(135deg, #fff6d6 0%, #ffedd5 100%) !important;
+            border-color: #d97706 !important;
+            color: #451a03 !important;
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.28) !important;
+            transform: translateY(-1.5px);
+
+            .warning-icon {
+                transform: scale(1.18);
+            }
+        }
+
+        /* Active / Click Effect */
+        &:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(217, 119, 6, 0.2) !important;
+        }
+    }
+
+    /* When dropdown is open: Rotate arrow icon & highlight active state */
+    &[open] {
+        summary.btn_regulatory_toggle {
+            background: #fef3c7 !important;
+            border-color: #d97706 !important;
+            box-shadow: 0 2px 6px rgba(217, 119, 6, 0.2) !important;
+
+            .dropdown-arrow-icon {
+                transform: rotate(180deg);
+            }
+        }
+    }
+
+    .regulatory_content_box {
+        animation: fadeInDown 0.25s ease-out;
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

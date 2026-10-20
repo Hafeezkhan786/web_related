@@ -1,0 +1,14 @@
+<odoo>
+    <record id="product_template_form_view_inherit_website_sale_stock" model="ir.ui.view">
+        <field name="name">product.template.form.view.inherit.website.sale.stock.inherit.psae.medicine.custom.website.pos</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="website_sale_stock.product_template_form_view_inherit_website_sale_stock" />
+        <field name="arch" type="xml">
+            <field name='out_of_stock_message' position="after">
+                <field name="should_restrict_website_sale" />
+                <field name="allowed_ecommerce_qty" />
+            </field>
+        </field>
+    </record>
+
+</odoo>

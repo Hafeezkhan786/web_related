@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mail_activity_view_tree_inherit_phone" model="ir.ui.view">
+        <field name="name">mail.activity.view.list.inherit.phone</field>
+        <field name="model">mail.activity</field>
+        <field name="inherit_id" ref="mail.mail_activity_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="phone" string="Phone"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="mail_activity_view_form_popup_inherit_phone" model="ir.ui.view">
+        <field name="name">mail.activity.view.form.popup.inherit.phone</field>
+        <field name="model">mail.activity</field>
+        <field name="inherit_id" ref="mail.mail_activity_view_form_popup"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="phone" readonly="1" string="Phone"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

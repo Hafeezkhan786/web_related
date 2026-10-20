@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Approved Customer Reviews & Rating Summary Component for both Logged-in & Guest Users (Image 1 Style) -->
+    <template id="psae_guest_product_reviews_list" inherit_id="website_sale.product_comment" priority="30">
+        <xpath expr="//a[hasclass('o_product_page_reviews_title')]" position="replace"/>
+        <xpath expr="//div[@id='o_product_page_reviews_content']" position="replace">
+            <div id="o_product_page_reviews_content" class="mt-4">
+
+                <t t-set="rating_stats" t-value="product.sudo().get_approved_rating_stats()"/>
+                <t t-set="approved_reviews" t-value="product.sudo().get_approved_ratings()"/>
+
+                <!-- 1. Header Title Centered (Image 1) -->
+                <div class="text-center mb-4">
+                    <h4 class="fw-semibold text-dark mb-0">Customer Reviews</h4>
+                </div>
+
+                <!-- 2. Top Summary 3-Column Section (Image 1) -->
+                <div class="row align-items-center mb-4 py-2">
+                    <!-- Column 1: Rating Score, Teal Stars & Count Badge -->
+                    <div class="col-12 col-md-4 mb-3 mb-md-0 psae-summary-divider-right px-4 text-center text-md-start">
+                        <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-2">
+                            <div class="psae-teal-stars fs-5">
+                                <t t-set="val_stars" t-value="rating_stats['avg']"/>
+                                <t t-foreach="[1, 2, 3, 4, 5]" t-as="s">
+                                    <i t-attf-class="fa #{'fa-star' if val_stars >= s else ('fa-star-half-o' if val_stars >= s - 0.5 else 'fa-star-o')}"/>
+                                </t>
+                            </div>
+                            <span class="psae-teal-stars fw-semibold text-decoration-underline fs-6">
+                                <t t-esc="rating_stats.get('avg_display', rating_stats['avg']) if rating_stats['count'] else '0'"/> out of 5
+                            </span>
+                        </div>
+                        <div class="text-muted small">
+                            Based on <t t-esc="rating_stats['count']"/> review<t t-if="rating_stats['count'] != 1">s</t>
+                            <span class="psae-check-square ms-1" title="Verified Customer Reviews"><i class="fa fa-check"></i></span>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Rating Star Breakdown Bars & Counts -->
+                    <div class="col-12 col-md-5 mb-3 mb-md-0 psae-summary-divider-right px-4">
+                        <t t-foreach="[5, 4, 3, 2, 1]" t-as="star_num">
+                            <div class="d-flex align-items-center mb-1 extra-small">
+                                <!-- Star Icons representation (e.g. 5 stars, 4 stars, etc.) -->
+                                <div class="psae-teal-stars me-2 text-nowrap" style="font-size: 0.72rem; min-width: 75px;">
+                                    <t t-foreach="[1, 2, 3, 4, 5]" t-as="si">
+                                        <i t-attf-class="fa #{'fa-star' if si &lt;= star_num else 'fa-star-o'}"/>
+                                    </t>
+                                </div>
+                                <!-- Teal Progress Bar -->
+                                <div class="psae-progress flex-grow-1 mx-2">
+                                    <div class="psae-progress-bar" t-attf-style="width: #{rating_stats['percent'][star_num]}%;"></div>
+                                </div>
+                                <!-- Raw Count Number -->
+                                <span class="text-muted text-end fw-medium" style="min-width: 15px;">
+                                    <t t-esc="rating_stats['counts'][star_num]"/>
+                                </span>
+                            </div>
+                        </t>
+                    </div>
+
+                    <!-- Column 3: Action Button (Single Write a Review Button) -->
+                    <div class="col-12 col-md-3 px-4 d-flex flex-column gap-2 justify-content-center">
+                        <button type="button" class="btn-psae-teal" data-bs-toggle="modal" data-bs-target="#psaeGuestRatingModal">
+                            Write a review
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. Review Flat List Section (Image 1 Style) -->
+                <t t-if="not approved_reviews">
+                    <div class="text-center py-5 text-muted border-top mt-3">
+                        <i class="fa fa-comments-o fs-1 text-secondary mb-2 d-block"></i>
+                        <h6 class="fw-bold mb-1">No Customer Reviews Yet</h6>
+                        <p class="small mb-0">Be the first to share your experience with this product!</p>
+                    </div>
+                </t>
+                <t t-else="">
+                    <!-- Sort Filter Bar (Only shown when reviews exist) -->
+                    <div class="psae-filter-bar mb-3 d-flex justify-content-between align-items-center">
+                        <div class="dropdown">
+                            <button class="psae-sort-btn dropdown-toggle" type="button" id="psaeReviewSortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                All Reviews
+                            </button>
+                            <ul class="dropdown-menu shadow-sm border-0 small" aria-labelledby="psaeReviewSortDropdown">
+                                <li><a class="dropdown-item active" href="#" data-sort="all">All Reviews</a></li>
+                                <li><a class="dropdown-item" href="#" data-sort="recent">Most Recent</a></li>
+                                <li><a class="dropdown-item" href="#" data-sort="highest">Highest Rating</a></li>
+                                <li><a class="dropdown-item" href="#" data-sort="lowest">Lowest Rating</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="psae-reviews-container">
+
+                        <t t-set="rev_idx" t-value="0"/>
+                        <t t-foreach="approved_reviews" t-as="rev">
+                            <t t-set="rev_idx" t-value="rev_idx + 1"/>
+                            <div t-attf-class="psae-review-item #{'d-none psae-extra-review' if rev_idx &gt; 3 else ''}"
+                                 t-att-data-rating="rev.rating"
+                                 t-att-data-date="rev.create_date">
+                                <!-- Row 1: Stars Top-Left, Date Top-Right -->
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <div class="psae-teal-stars small">
+                                        <t t-set="r_val" t-value="int(round(rev.rating))"/>
+                                        <t t-foreach="[1, 2, 3, 4, 5]" t-as="star_i">
+                                            <i t-attf-class="fa #{'fa-star' if r_val &gt;= star_i else 'fa-star-o'}"/>
+                                        </t>
+                                    </div>
+                                    <div class="text-muted extra-small" t-esc="rev.create_date" t-options="{'widget': 'date'}"/>
+                                </div>
+
+                                <!-- Row 2: Avatar Box + Customer Name + Green Verified Badge Tag -->
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <div class="psae-avatar-box">
+                                        <i class="fa fa-user-o"></i>
+                                        <span class="psae-avatar-check"><i class="fa fa-check"></i></span>
+                                    </div>
+                                    <span class="fw-bold text-dark small" t-esc="rev.partner_id.name or 'Guest Customer'"/>
+                                    <span class="psae-badge-verified">Verified</span>
+                                </div>
+
+                                <!-- Row 3: Clean Review Feedback Content -->
+                                <div class="mt-2" t-if="rev.feedback">
+                                    <t t-set="fb_lines" t-value="(rev.feedback or '').strip().split('\n')"/>
+                                    <t t-if="len(fb_lines) &gt; 1">
+                                        <h6 class="fw-bold text-dark mb-1" style="font-size: 0.95rem;" t-esc="fb_lines[0]"/>
+                                        <p class="text-dark small mb-0" style="line-height: 1.5;" t-esc="'\n'.join(fb_lines[1:])"/>
+                                    </t>
+                                    <t t-else="">
+                                        <p class="text-dark fw-medium mb-0" style="font-size: 0.93rem; line-height: 1.5;" t-esc="rev.feedback"/>
+                                    </t>
+                                </div>
+                            </div>
+
+                        </t>
+                    </div>
+
+
+                    <!-- Numbered Pagination Container (Image 2 Style) -->
+                    <div id="psae_reviews_pagination_wrap" class="d-flex justify-content-center align-items-center gap-3 mt-4 pt-3 border-top">
+                    </div>
+                </t>
+            </div>
+
+        </xpath>
+    </template>
+
+    <!-- Product Template Overlay for Guest Rating Modal -->
+    <template id="psae_guest_product_rating_modal" inherit_id="website_sale.product" priority="25">
+        <xpath expr="//div[@id='product_full_description']" position="after">
+            <t t-set="curr_user" t-value="request.env.user"/>
+            <t t-set="is_guest" t-value="curr_user._is_public() if curr_user else True"/>
+            <t t-set="user_name" t-value="'' if is_guest else (curr_user.partner_id.name or '')"/>
+            <t t-set="user_email" t-value="'' if is_guest else (curr_user.partner_id.email or '')"/>
+
+            <!-- Guest Rating Modal -->
+            <div class="modal fade" id="psaeGuestRatingModal" tabindex="-1" aria-labelledby="psaeGuestRatingModalLabel" aria-hidden="true" t-att-data-product-id="product.id">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow-lg rounded-3">
+                        <div class="modal-header border-bottom-0 pb-0">
+                            <h5 class="modal-title fw-bold" id="psaeGuestRatingModalLabel">
+                                <i class="fa fa-star text-psae-teal me-1"></i> Rate &amp; Review Product
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-4">
+                            <form id="psae_guest_rating_form" onsubmit="return false;">
+                                <div class="text-center mb-4">
+                                    <h6 class="fw-bold mb-1" t-esc="product.name"></h6>
+                                    <p class="text-muted small mb-2">Select your star rating and share your experience</p>
+                                    
+                                    <!-- Interactive Star Rating Input (flex-row-reverse: 1 star left, 5 stars right) -->
+                                    <div class="psae-star-rating-select my-2">
+                                        <input type="radio" id="star5" name="guest_star_rating" value="5" />
+                                        <label for="star5" title="5 Stars - Excellent"><i class="fa fa-star"></i></label>
+                                        
+                                        <input type="radio" id="star4" name="guest_star_rating" value="4" />
+                                        <label for="star4" title="4 Stars - Very Good"><i class="fa fa-star"></i></label>
+                                        
+                                        <input type="radio" id="star3" name="guest_star_rating" value="3" />
+                                        <label for="star3" title="3 Stars - Good"><i class="fa fa-star"></i></label>
+                                        
+                                        <input type="radio" id="star2" name="guest_star_rating" value="2" />
+                                        <label for="star2" title="2 Stars - Fair"><i class="fa fa-star"></i></label>
+                                        
+                                        <input type="radio" id="star1" name="guest_star_rating" value="1" />
+                                        <label for="star1" title="1 Star - Poor"><i class="fa fa-star"></i></label>
+                                    </div>
+                                    <div id="guest_star_text" class="fw-bold text-psae-teal small mt-1">Select 1-5 Stars</div>
+                                </div>
+
+                                <!-- 1. Review / Comment (Required) -->
+                                <div class="mb-3">
+                                    <label for="guest_reviewer_comment" class="form-label fw-semibold small mb-1">Your Review / Comment <span class="text-danger">*</span></label>
+                                    <textarea id="guest_reviewer_comment" class="form-control" rows="3" required="required" placeholder="Write your review or feedback here..."></textarea>
+                                </div>
+
+                                <!-- 2. Your Name (Required) -->
+                                <div class="mb-3">
+                                    <label for="guest_reviewer_name" class="form-label fw-semibold small mb-1">Your Name <span class="text-danger">*</span></label>
+                                    <input type="text" id="guest_reviewer_name" class="form-control" required="required" placeholder="Enter your name" t-att-value="user_name"/>
+                                </div>
+
+                                <!-- 3. Your Email Address (Required) -->
+                                <div class="mb-3">
+                                    <label for="guest_reviewer_email" class="form-label fw-semibold small mb-1">Your Email Address <span class="text-danger">*</span></label>
+                                    <input type="email" id="guest_reviewer_email" class="form-control" required="required" placeholder="name@example.com" t-att-value="user_email"/>
+                                    <div class="form-text text-muted extra-small">Required for review verification &amp; 1 review per product limit.</div>
+                                </div>
+
+                                <div class="text-center text-muted extra-small mb-3 bg-light p-2 rounded">
+                                    <i class="fa fa-shield text-secondary me-1"></i> Reviews are published on the website after admin approval.
+                                </div>
+
+                                <div id="guest_rating_error" class="alert alert-danger d-none mb-3 fs-6" role="alert"></div>
+                                <div id="guest_rating_success" class="alert alert-success d-none mb-3 fs-6" role="alert"></div>
+
+                                <div class="d-flex justify-content-end gap-2 pt-2 border-top">
+                                    <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" id="submit_guest_rating_btn" t-att-data-product-id="product.id" class="btn-psae-teal px-4 fw-bold" style="width: auto;">
+                                        <i class="fa fa-paper-plane me-1"></i> Submit Review
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>
+
+

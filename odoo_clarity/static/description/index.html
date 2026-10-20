@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Odoo Clarity</title>
+  <style>
+    /* Reset and base styles */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
+    }
+
+    /* Typography */
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #eaecef;
+      padding-bottom: 10px;
+    }
+
+    h2 {
+      color: #34495e;
+      border-bottom: 1px solid #eaecef;
+      padding-bottom: 10px;
+      margin-top: 40px;
+    }
+
+    h3 {
+      color: #555;
+      margin-top: 30px;
+    }
+
+    p {
+      margin-bottom: 16px;
+    }
+
+    /* Links */
+    a {
+      color: #0969da;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Lists */
+    ol, ul {
+      margin-bottom: 16px;
+      padding-left: 2em;
+    }
+
+    li {
+      margin: 4px 0;
+    }
+
+    /* Images - GitHub style */
+    img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    }
+
+    /* Table of contents */
+    .table-of-contents {
+      background: #f6f8fa;
+      border: 1px solid #d1d9e0;
+      border-radius: 6px;
+      padding: 16px;
+      margin: 16px 0 24px 0;
+    }
+
+    .table-of-contents h3 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      color: #656d76;
+    }
+
+    .table-of-contents ul {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 0;
+    }
+
+    .table-of-contents li {
+      margin: 4px 0;
+    }
+
+    .table-of-contents ul ul {
+      padding-left: 16px;
+      margin-top: 4px;
+    }
+
+    /* Sections */
+    .section {
+      margin-bottom: 32px;
+      scroll-margin-top: 20px;
+    }
+
+    /* Smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Responsive design */
+    @media (max-width: 600px) {
+      body {
+        padding: 16px;
+      }
+
+      h1 {
+        font-size: 1.8em;
+      }
+
+      h2 {
+        font-size: 1.4em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="document">
+    <h1>Odoo Clarity</h1>
+
+    <div class="table-of-contents">
+      <h3>Table of Contents</h3>
+      <ul>
+        <li><a href="#add-a-project">Add a Project</a></li>
+        <li><a href="#install-tracking-code">Install tracking code</a></li>
+        <li><a href="#credits">Credits</a></li>
+      </ul>
+    </div>
+
+    <div class="section" id="add-a-project">
+      <h2>Add a Project</h2>
+      <ol>
+        <li>
+          <p>Sign in to your <a href="https://clarity.microsoft.com/" target="_blank">Clarity</a> account.</p>
+        </li>
+        <li>
+          <p>Select 'New project' to start adding a project.</p>
+        </li>
+      </ol>
+
+      <p><img src="add-project-step-1.png" alt="Microsoft Clarity - Add new project step 1" style="max-width: 100%;" /></p>
+
+      <ol start="3">
+        <li>Enter the Name and Website details. Select Add new project once done.</li>
+      </ol>
+
+      <p><img src="add-project-step-2.png" alt="Microsoft Clarity - Add new project step 2" style="max-width: 100%;" /></p>
+    </div>
+
+    <div class="section" id="install-tracking-code">
+      <h2>Install tracking code</h2>
+      <ol>
+        <li>Select a project and go to Settings → Setup</li>
+      </ol>
+
+      <p><img src="setup-step-1.png" alt="Microsoft Clarity - Setup step 1" style="max-width: 100%;" /></p>
+
+      <ol start="2">
+        <li>Choose get Tracking Code</li>
+      </ol>
+
+      <p><img src="setup-step-2.png" alt="Microsoft Clarity - Setup step 2" style="max-width: 100%;" /></p>
+
+      <ol start="3">
+        <li>Get tracking code</li>
+      </ol>
+
+      <p><img src="setup-step-3.png" alt="Microsoft Clarity - Setup step 3" style="max-width: 100%;" /></p>
+
+      <ol start="4">
+        <li>Copy tracking code to Setting → General Setting → Integrations → Microsoft Clarity.</li>
+      </ol>
+
+      <p><img src="setup-step-4.png" alt="Odoo - Microsoft Clarity integration setup" style="max-width: 100%;" /></p>
+
+      <ol start="5">
+        <li>Review your recording videos on <a href="https://clarity.microsoft.com/projects" target="_blank">https://clarity.microsoft.com/projects</a></li>
+      </ol>
+
+      <p><img src="setup-step-5.png" alt="Microsoft Clarity - Review recordings" style="max-width: 100%;" /></p>
+    </div>
+
+    <div class="section" id="credits">
+      <h2>Credits</h2>
+
+      <p><strong>Authors</strong></p>
+      <ul>
+        <li>Vu Nguyen</li>
+      </ul>
+
+      <p><strong>Contributors</strong></p>
+      <ul>
+        <li>Vu Nguyen &lt;<a href="mailto:vuna2004@gmail.com">vuna2004@gmail.com</a>&gt;</li>
+      </ul>
+    </div>
+  </div>
+</body>
+
+</html>

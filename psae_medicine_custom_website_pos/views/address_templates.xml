@@ -1,0 +1,71 @@
+<odoo>
+    <template id="address_form_fields" inherit_id="portal.address_form_fields">
+        <div id="div_country" position="replace">
+        </div>
+        <div id="div_email" position="attributes">
+            <attribute name="class" add="col-lg-4" remove="col-lg-6" separator=" "/>
+        </div>
+        <label for="o_email" position="attributes">
+            <attribute name="class" add="label-optional" separator=" "/>
+        </label>
+        <input id='o_email' position="attributes">
+            <attribute name="placeholder">Optional</attribute>
+        </input>
+        <div id="div_phone" position="attributes">
+            <attribute name="class" add="col-lg-4" remove="col-lg-6" separator=" "/>
+        </div>
+        <div id="div_phone" position="before">
+            <div id="div_country_custom" class="col-lg-4 mb-2">
+                <label class="col-form-label" for="o_country_id">Country</label>
+                <select id="o_country_id" name="country_id" class="form-select">
+                    <option value="">Country...</option>
+                    <t t-foreach="countries" t-as="c">
+                        <option t-att-value="c.id" t-att-selected="c.id == country.id" t-att-code="c.code">
+                            <t t-out="c.name" />
+                        </option>
+                    </t>
+                </select>
+            </div>
+        </div>
+        <div id="div_phone" position="after">
+            <div id="div_custom_mobile" class="col-lg-6 mb-2">
+                <label class="col-form-label label-optional" for="o_custom_mobile">Mobile (Whatsapp)</label>
+                <input id="o_custom_mobile" type="tel" name="custom_mobile" t-att-value="partner_sudo.custom_mobile" placeholder="Optional" class="form-control"/>
+            </div>
+        </div>
+        <xpath expr="//t[@t-if='zip_before_city']//label[@for='o_zip']" position="attributes">
+            <attribute name="class" add="label-optional" separator=" "/>
+        </xpath>
+        <xpath expr="//t[@t-if='zip_before_city']//input[@id='o_zip']" position="attributes">
+            <attribute name="placeholder">Optional</attribute>
+        </xpath>
+        <xpath expr="//t[@t-if='not zip_before_city']//label[@for='o_zip']" position="attributes">
+            <attribute name="class" add="label-optional" separator=" "/>
+        </xpath>
+        <xpath expr="//t[@t-if='not zip_before_city']//input[@id='o_zip']" position="attributes">
+            <attribute name="placeholder">Optional</attribute>
+        </xpath>
+        <input name="required_fields" position="attributes">
+            <attribute name="t-att-value">'name,phone,country_id,state_id'</attribute>
+        </input>
+        <label for="o_name" position="replace">
+            <label class="col-form-label" for="o_name">Full Name</label>
+        </label>
+        <label for="o_street" position="replace">
+            <label class="col-form-label" for="o_street">Address and House Number</label>
+        </label>
+        <label for="o_street2" position="replace">
+            <label class="col-form-label label-optional" for="o_street2">Address Field(Optional)</label>
+        </label>
+        <label for="o_state_id" position="replace">
+            <label class="col-form-label label-optional" for="o_state_id">
+                <strong class="text-danger">Other Province / Karachi City</strong>
+            </label>
+        </label>
+        <!-- Never preselect a state: drop the core fallback to partner_sudo.state_id
+            so the customer is forced to pick on every save (new and edit alike). -->
+        <xpath expr="//select[@name='state_id']/option[@t-foreach='country_states']" position="attributes">
+            <attribute name="t-att-selected">False</attribute>
+        </xpath>
+    </template>
+</odoo>

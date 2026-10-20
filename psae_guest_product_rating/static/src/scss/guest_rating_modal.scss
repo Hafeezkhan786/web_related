@@ -1,0 +1,247 @@
+/* PSAE Guest Rating Modal & Review Section Theme Styles */
+
+.psae-teal-stars,
+.text-psae-teal {
+    color: var(--o-color-primary, var(--primary, #0e766e)) !important;
+}
+
+.bg-psae-teal {
+    background-color: var(--o-color-primary, var(--primary, #0e766e)) !important;
+    color: #ffffff !important;
+}
+
+/* Custom Buttons (Image 1 style matching theme) */
+.btn-psae-teal {
+    background-color: var(--o-color-primary, var(--primary, #0e766e)) !important;
+    color: #ffffff !important;
+    border: 1px solid var(--o-color-primary, var(--primary, #0e766e)) !important;
+    border-radius: 2px !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    padding: 9px 20px !important;
+    transition: all 0.2s ease;
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+
+    &:hover {
+        opacity: 0.9 !important;
+        color: #ffffff !important;
+    }
+}
+
+.btn-psae-teal-outline {
+    background-color: transparent !important;
+    color: var(--o-color-primary, var(--primary, #0e766e)) !important;
+    border: 1.5px solid var(--o-color-primary, var(--primary, #0e766e)) !important;
+    border-radius: 2px !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    padding: 8px 20px !important;
+    transition: all 0.2s ease;
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+
+    &:hover {
+        background-color: var(--o-color-primary, var(--primary, #0e766e)) !important;
+        color: #ffffff !important;
+    }
+}
+
+/* Ratings Summary Header Block (3 Columns) */
+.psae-summary-divider-right {
+    @media (min-width: 768px) {
+        border-right: 1px solid #eaeaea;
+    }
+}
+
+/* Check Square Badge */
+.psae-check-square {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    background-color: var(--o-color-primary, var(--primary, #0e766e));
+    color: #ffffff;
+    border-radius: 2px;
+    font-size: 10px;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+/* Star Rating Distribution Rows */
+.psae-progress {
+    height: 14px;
+    background-color: #f0f0f0;
+    border-radius: 1px;
+    overflow: hidden;
+
+    .psae-progress-bar {
+        background-color: var(--o-color-primary, var(--primary, #0e766e));
+        height: 100%;
+        transition: width 0.3s ease;
+    }
+}
+
+/* Filter / Sort Row */
+.psae-filter-bar {
+    border-top: 1px solid #eaeaea;
+    border-bottom: 1px solid #eaeaea;
+    padding: 10px 0;
+
+    .psae-sort-btn {
+        background: none;
+        border: none;
+        color: #333333;
+        font-weight: 500;
+        font-size: 0.95rem;
+        padding: 0;
+        cursor: pointer;
+
+        i {
+            margin-left: 4px;
+            font-size: 0.8rem;
+        }
+    }
+}
+
+/* Review Flat List Item (Image 1 Style) */
+.psae-review-item {
+    border-bottom: 1px solid #f0f0f0;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+    background: transparent !important;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    .psae-avatar-box {
+        width: 32px;
+        height: 32px;
+        background-color: rgba(14, 118, 110, 0.1);
+        border: 1px solid rgba(14, 118, 110, 0.25);
+        color: var(--o-color-primary, var(--primary, #0e766e));
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        position: relative;
+
+        .psae-avatar-check {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 12px;
+            height: 12px;
+            background-color: var(--o-color-primary, var(--primary, #0e766e));
+            color: #ffffff;
+            font-size: 8px;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    .psae-badge-verified {
+        background-color: var(--o-color-primary, var(--primary, #0e766e));
+        color: #ffffff;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 2px 7px;
+        border-radius: 2px;
+        letter-spacing: 0.2px;
+    }
+}
+
+/* Star Rating Modal Selector */
+.psae-star-rating-select {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    font-size: 2.5rem;
+
+    input[type="radio"] {
+        display: none !important;
+    }
+
+    label {
+        color: #d3d3d3;
+        cursor: pointer;
+        padding: 0 6px;
+        transition: color 0.15s ease-in-out, transform 0.15s ease-in-out;
+        display: inline-block;
+
+        &:hover,
+        &:hover ~ label {
+            color: var(--o-color-primary, var(--primary, #0e766e)) !important;
+            transform: scale(1.15);
+        }
+    }
+
+    input[type="radio"]:checked ~ label {
+        color: var(--o-color-primary, var(--primary, #0e766e)) !important;
+    }
+}
+
+/* Numbered Pagination Control Styles (Image 2) */
+.psae-pagination-list {
+    list-style: none !important;
+    padding: 0;
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 1.25rem;
+
+    .psae-page-item {
+        display: inline-block;
+
+        .psae-page-link {
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--o-color-primary, var(--primary, #0e766e));
+            cursor: pointer;
+            transition: opacity 0.15s ease, transform 0.15s ease;
+            user-select: none;
+            display: inline-block;
+
+            &:hover {
+                opacity: 0.8;
+                transform: scale(1.08);
+            }
+        }
+
+        &.active {
+            .psae-page-link {
+                color: #555555 !important;
+                font-weight: 700 !important;
+                font-size: 1.25rem !important;
+                cursor: default;
+
+                &:hover {
+                    transform: none;
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}
+
+/* Hide default Odoo chatter composer on product reviews section since we use the dedicated Write a Review modal */
+#o_product_page_reviews,
+.o_shop_discussion_rating {
+    .o_portal_chatter_composer,
+    .o_portal_chatter_init_form,
+    .o_portal_chatter_avatar,
+    div[name="portal_composer"] {
+        display: none !important;
+    }
+}
+
+
+

@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pos_config_user,access_pos_config_user,model_pos_config,point_of_sale.group_pos_user,1,0,0,0
+access_pos_config_manager,access_pos_config_manager,model_pos_config,point_of_sale.group_pos_manager,1,1,1,1
+access_pos_order_user,access_pos_order_user,model_pos_order,point_of_sale.group_pos_user,1,0,0,0
+access_pos_order_manager,access_pos_order_manager,model_pos_order,point_of_sale.group_pos_manager,1,1,1,1
+access_res_company_user,access_res_company_user,model_res_company,base.group_user,1,0,0,0
+access_res_company_manager,access_res_company_manager,model_res_company,base.group_system,1,1,1,1

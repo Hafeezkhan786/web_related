@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Paper Format for Delivery Slip (58mm EPSON TM-m10 thermal receipt) -->
+        <record id="paperformat_delivery_slip" model="report.paperformat">
+            <field name="name">Delivery Slip Paper Format</field>
+            <field name="default">False</field>
+            <field name="format">custom</field>
+            <field name="page_height">150</field>
+            <field name="page_width">58</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">2</field>
+            <field name="margin_bottom">2</field>
+            <field name="margin_left">2</field>
+            <field name="margin_right">2</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">96</field>
+        </record>
+
+        <!-- QWeb Template for Delivery Slip -->
+        <template id="report_delivery_slip">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-set="dummy" t-value="doc.change_size_page()"/>
+                    <div class="page" style="
+                        font-family: Arial, sans-serif;
+                        font-size: 13px;
+                        color: #000;
+                        line-height: 1.3;
+                        width: 54mm;
+                        max-width: 54mm;
+                        margin: 0 auto;
+                        padding: 0;
+                    ">
+
+                        <!-- Logo Section -->
+                        <t t-if="doc.company_id.logo">
+                            <div style="text-align: center; margin-bottom: 2px;">
+                                <img t-att-src="image_data_uri(doc.company_id.logo)"
+                                     alt="Logo" style="max-width: 70px; height: auto; display: inline-block;"/>
+                            </div>
+                        </t>
+
+                        <!-- Heading -->
+                        <div style="font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Delivery Slip
+                        </div>
+
+                        <!-- Company Header -->
+                        <div style="font-size: 13px; text-align: center; margin-bottom: 4px; line-height: 1.3;">
+                            <span style="font-size: 15px; font-weight: bold;"><t t-esc="doc.company_id.name"/></span><br/>
+                            Ph: <t t-esc="doc.company_id.phone or '+923337222221'"/><br/>
+                            WA: 0337-8314-428 / 0321-0477-759<br/>
+                            STRN# 3277876341689<br/>
+                            NTN# 9352512-0
+                        </div>
+
+                        <!-- Delivery Details -->
+                        <div style="font-size: 13px; text-align: center; border-top: 1px dashed #000; padding-top: 4px; margin-bottom: 4px; line-height: 1.3;">
+                            Doc# <t t-esc="doc.name"/><br/>
+                            Date: <span t-field="doc.scheduled_date" t-options='{"widget": "date", "format": "dd-MM-yyyy"}'/><br/>
+                            <t t-if="doc.origin">
+                                Order Ref: <t t-esc="doc.origin"/><br/>
+                            </t>
+                            <t t-if="doc.partner_id">
+                                <span style="font-weight: bold;">Cust: <t t-esc="doc.partner_id.name"/></span><br/>
+                            </t>
+                            <t t-set="partner_phone" t-value="doc.get_partner_phone()"/>
+                            <t t-if="partner_phone">
+                                <span style="font-weight: bold;">Ph: <t t-esc="partner_phone"/></span><br/>
+                            </t>
+                            <t t-if="doc.partner_id.street">
+                                <t t-esc="doc.partner_id.street"/><br/>
+                            </t>
+                            <t t-if="doc.partner_id.street2">
+                                <t t-esc="doc.partner_id.street2"/><br/>
+                            </t>
+                            <t t-esc="doc.partner_id.city or ''"/>
+                            <t t-if="doc.partner_id.state_id">, <t t-esc="doc.partner_id.state_id.name"/></t>
+                            <t t-if="doc.sale_id and doc.sale_id.team_id">
+                                <br/>Team: <t t-esc="doc.sale_id.team_id.name"/>
+                            </t>
+                            <t t-if="doc.sale_id and doc.sale_id.user_id">
+                                <br/>Sales Person: <t t-esc="doc.sale_id.user_id.name"/>
+                            </t>
+                        </div>
+
+                        <!-- Product Lines Table -->
+                        <table style="font-size: 13px; border-top: 1px double #000; border-bottom: 1px dashed #000; width: 100%; border-collapse: collapse; margin-bottom: 4px; line-height: 1.3;">
+                            <colgroup>
+                                <col style="width: 15%;"/>
+                                <col style="width: 65%;"/>
+                                <col style="width: 20%;"/>
+                            </colgroup>
+                            <tr style="border-bottom: 1px dashed #000;">
+                                <th style="text-align: left; padding: 2px 0; font-size: 13px; font-weight: bold;">Qty</th>
+                                <th style="text-align: left; padding: 2px 0; font-size: 13px; font-weight: bold;">Product</th>
+                                <th style="text-align: right; padding: 2px 0; font-size: 13px; font-weight: bold;">Unit</th>
+                            </tr>
+                            <t t-foreach="doc.move_ids" t-as="move">
+                                <t t-if="move.product_id">
+                                    <tr style="border-bottom: 1px dashed #ccc; vertical-align: top;">
+                                        <td style="padding: 2px 0; text-align: left; font-size: 13px;">
+                                            <t t-set="qty" t-value="move.quantity if move.state == 'done' else move.product_uom_qty"/>
+                                            <t t-esc="int(qty) if qty == int(qty) else qty"/>
+                                        </td>
+                                        <td style="padding: 2px 0; text-align: left;">
+                                            <div style="line-height: 1.3; font-size: 13px; word-break: break-word;">
+                                                <t t-esc="move.product_id.name"/>
+                                            </div>
+                                        </td>
+                                        <td style="padding: 2px 0; text-align: right; font-size: 12px;">
+                                            <t t-esc="move.product_uom.name"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </table>
+
+                        <!-- Notes / Terms Section -->
+                        <t t-if="doc.note">
+                            <div style="font-size: 11px; padding-top: 2px; margin-bottom: 4px; line-height: 1.3;">
+                                <t t-raw="doc.get_cleaned_note()"/>
+                            </div>
+                        </t>
+
+                        <!-- Footer -->
+                        <div style="font-size: 12px; text-align: center; border-top: 1px dashed #000; padding-top: 4px; margin-top: 2px;">
+                            Thank You... Please Visit Again ...
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <!-- Report Action for Delivery Slip -->
+        <record id="action_report_delivery_slip" model="ir.actions.report">
+            <field name="name">Delivery Inventory Slip</field>
+            <field name="model">stock.picking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">custom_receipt_for_delivery.report_delivery_slip</field>
+            <field name="report_file">custom_receipt_for_delivery.report_delivery_slip</field>
+            <field name="binding_model_id" ref="stock.model_stock_picking"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="paperformat_delivery_slip"/>
+        </record>
+    </data>
+</odoo>

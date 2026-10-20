@@ -1,0 +1,30 @@
+<templates id="template" xml:space="preserve">
+    <t t-name="psae_medicine_custom_website_pos.PaymentScreenPaymentLines" t-inherit="point_of_sale.PaymentScreenPaymentLines" t-inherit-mode="extension">
+        <xpath expr="//t[@t-if='line.isSelected()']//PriceFormatter" position="after">
+            <t t-if="!props.isRefundOrder and line.surchargeAmount">
+                <t t-set="breakdown" t-value="line.surchargeBreakdown"/>
+                <span class="ms-3 fs-6">+</span>
+                <span class="ms-1 fs-3">
+                    <PriceFormatter price="breakdown.surcharge"/>
+                </span>
+                <span class="ms-3 fs-6">=</span>
+                <span class="ms-1 fs-3">
+                    <PriceFormatter price="breakdown.total"/>
+                </span>
+            </t>
+        </xpath>
+        <xpath expr="//t[@t-else='']//PriceFormatter" position="after">
+            <t t-if="!props.isRefundOrder and line.surchargeAmount">
+                <t t-set="breakdown" t-value="line.surchargeBreakdown"/>
+                <span class="ms-3 fs-6">+</span>
+                <span class="ms-1 fs-3">
+                    <PriceFormatter price="breakdown.surcharge"/>
+                </span>
+                <span class="ms-3 fs-6">=</span>
+                <span class="ms-1 fs-3">
+                    <PriceFormatter price="breakdown.total"/>
+                </span>
+            </t>
+        </xpath>
+    </t>
+</templates>

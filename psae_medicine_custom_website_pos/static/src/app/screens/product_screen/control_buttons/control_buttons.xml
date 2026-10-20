@@ -1,0 +1,7 @@
+<templates id="template" xml:space="preserve">
+    <t t-name="psae_medicine_custom_website_pos.ControlButtons" t-inherit="point_of_sale.ControlButtons" t-inherit-mode="extension">
+        <SelectPartnerButton position="after">
+            <HeaderNoteButton />
+        </SelectPartnerButton>
+    </t>
+</templates>

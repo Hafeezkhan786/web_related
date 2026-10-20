@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- POS Configuration Form View -->
+        <record id="view_pos_config_form_fbr" model="ir.ui.view">
+            <field name="name">pos.config.form.fbr</field>
+            <field name="model">pos.config</field>
+            <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="inside">
+                    <group string="FBR POS Integration" name="fbr_pos_integration_group">
+                        <group>
+                            <field name="fbr_pos_integration" string="Enable FBR POS Integration"/>
+                            <field name="fbr_environment" string="FBR Environment" invisible="not fbr_pos_integration"/>
+                        </group>
+                        <!-- Testing Environment Fields -->
+                        <group string="Testing Settings"
+                               invisible="not fbr_pos_integration or fbr_environment != 'testing'">
+                            <field name="fbr_pos_url"
+                                   placeholder="http://localhost:8524/api/IMSFiscal/GetInvoiceNumberByModel"/>
+                            <field name="fbr_pos_id" placeholder="Your POS ID"/>
+                            <field name="fbr_branch_code" placeholder="Your Branch Code"/>
+                            <field name="fbr_pos_timeout"/>
+                            <p class="text-muted">
+                                <strong>Note:Testing environment doesn't require token authentication.
+                                    Just provide URL, POS ID, and Branch Code.
+                                </strong>
+                            </p>
+                        </group>
+
+                        <!-- Production Environment Fields -->
+                        <group string="Production Settings"
+                               invisible="not fbr_pos_integration or fbr_environment != 'production'">
+                            <field name="fbr_pos_id" placeholder="FBR POS ID"/>
+                            <field name="fbr_branch_code" placeholder="FBR Branch Code"/>
+                            <field name="fbr_production_url" placeholder="https://gw.fbr.gov.pk/imsp/v1/api/Live/PostData"/>
+                            <field name="fbr_production_token" password="True" placeholder=" FBR Production Token"/>
+                            <field name="fbr_pos_timeout"/>
+                            <p class="text-muted">
+                                <strong>Note: Production environment requires POS ID and Branch Code along with URL and Token.</strong>
+                            </p>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

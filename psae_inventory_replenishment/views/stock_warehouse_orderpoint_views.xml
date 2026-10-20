@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Extend the stock.warehouse.orderpoint tree view -->
+        <record id="view_warehouse_orderpoint_tree" model="ir.ui.view">
+            <field name="name">stock.warehouse.orderpoint.tree</field>
+            <field name="model">stock.warehouse.orderpoint</field>
+            <field name="inherit_id" ref="stock.view_warehouse_orderpoint_tree_editable"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='qty_on_hand']" position="after">
+                    <field name="qty_delivered_current_month_display" optional="show"/>
+                    <field name="qty_to_deliver_display" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

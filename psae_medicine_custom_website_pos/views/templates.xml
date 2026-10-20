@@ -1,0 +1,87 @@
+<odoo>
+    <template id="product_price" inherit_id="website_sale.product_price">
+        <xpath expr="//div[hasclass('css_editable_mode_hidden')]" position="inside">
+            <span t-attf-class="ml-2 text-muted h6 o_psae_uom_per_label {{'' if combination_info['uom_per_label'] else 'd-none'}}">
+                PER <span class="o_psae_uom_per_value" t-out="combination_info['uom_per_label']"/>
+            </span>
+        </xpath>
+        <!-- Custom Regulatory Restrictions Dropdown in the price area, shown when restricted. -->
+        <xpath expr="//div[@id='product_unavailable']//br" position="after">
+            <details class="drap_regulatory_dropdown my-3" t-if="product.should_restrict_website_sale">
+                <summary class="btn_regulatory_toggle d-inline-flex align-items-center justify-content-between gap-2 fw-semibold" style="cursor: pointer; user-select: none;">
+                    <span class="d-inline-flex align-items-center gap-2">
+                        <i class="fa fa-exclamation-triangle warning-icon"/>
+                        <span>Regulatory Restrictions Apply</span>
+                    </span>
+                    <i class="fa fa-chevron-down dropdown-arrow-icon ms-2"/>
+                </summary>
+                <div class="regulatory_content_box p-3 mt-2 rounded-3 border bg-light shadow-sm">
+                    <div class="fst-italic text-muted mb-3 small">This medicine is subject to applicable DRAP regulations. Please contact our pharmacist for guidance regarding eligibility, documentation (if applicable), and supply.</div>
+                    <a t-att-href="website.contact_us_button_url" class="btn btn-primary btn-sm btn_cta rounded-pill px-3 shadow-sm">
+                        <i class="fa fa-user-md me-1"/> Contact Our Pharmacist
+                    </a>
+                </div>
+            </details>
+        </xpath>
+        <xpath expr="//div[@id='product_unavailable']//br" position="attributes">
+            <attribute name="class" add="d-none" separator=" "/>
+        </xpath>
+    </template>
+
+    <template id="cta_wrapper" inherit_id="website_sale.cta_wrapper">
+        <div id="o_wsale_cta_wrapper" position="after">
+            <span t-attf-class="ms-1 text-uppercase text-muted h6 o_psae_website_uom_label {{'' if combination_info['website_uom_label'] else 'd-none'}}" t-out="combination_info['website_uom_label']"/>
+        </div>
+    </template>
+
+    <template id="product" inherit_id="website_sale.product">
+        <!-- Show product tags before the terms block, then hide the terms via attributes
+             only (node kept, no replace, so other views' xpaths stay valid) -->
+        <xpath expr="//t[@t-call='website_sale.product_terms_and_conditions']" position="before">
+            <t t-if="is_view_active('website_sale.product_tags')" t-call="website_sale.product_tags">
+                <t t-set="all_product_tags" t-value="product_variant.all_product_tag_ids"/>
+            </t>
+        </xpath>
+        <xpath expr="//t[@t-call='website_sale.product_terms_and_conditions']" position="attributes">
+            <attribute name="t-if">False</attribute>
+        </xpath>
+        <!-- v19's core Contact Us (#contact_us_wrapper) duplicates ours in the price area.
+             Hide its whole outer section: core JS only toggles the inner wrapper, so d-none
+             on the untouched parent section holds and removes the entire block. -->
+        <xpath expr="//div[hasclass('o_wsale_product_details_content_section_contact')]" position="attributes">
+            <attribute name="class" add="d-none" separator=" "/>
+        </xpath>
+        <div id="product_details" position="inside">
+            <div t-field="product.description_ecommerce" class="oe_structure mb-3 text-muted" placeholder="A detailed, formatted description to promote your product on this page. Use '/' to discover more features." />
+        </div>
+    </template>
+
+    <template id="product_title" inherit_id="website_sale.product_title">
+        <div t-field="product.description_ecommerce" position="attributes">
+            <attribute name="t-attf-class">d-none</attribute>
+        </div>
+        <!-- Tags are shown in the CTA section instead; hide the title-area copy via
+             attributes only (node kept, no replace, so other views' xpaths stay valid) -->
+        <xpath expr="//t[@t-call='website_sale.product_tags']" position="attributes">
+            <attribute name="t-if">False</attribute>
+        </xpath>
+    </template>
+
+    <template id="products_category_description" inherit_id="website_sale.products" name="Category Description at Bottom">
+        <!-- Hide any default category description rendering in products_grid -->
+        <xpath expr="//div[@id='products_grid']//*[@t-field='category.website_description']" position="attributes">
+            <attribute name="class" add="d-none" separator=" "/>
+        </xpath>
+        <!-- Render Category Description first, FAQ second, and website building block last (after pagination) -->
+        <xpath expr="//div[@id='products_grid']" position="inside">
+            <div t-if="category and category.website_description and not is_html_empty(category.website_description)" class="o_wsale_category_bottom_description mt-4 pt-3 border-top">
+                <div class="text-muted" t-out="category.website_description"/>
+            </div>
+            <div t-if="category and category.category_faq and not is_html_empty(category.category_faq)" class="o_wsale_category_faq mt-4 pt-3 border-top">
+                <h3 class="text-center mb-3">Frequently Asked Questions</h3>
+                <div class="text-muted" t-out="category.category_faq"/>
+            </div>
+            <div class="oe_structure mt-4 pt-3 border-top" id="category_bottom_snippets"/>
+        </xpath>
+    </template>
+</odoo>

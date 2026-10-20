@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Cron Job to Retry Failed FBR Orders -->
+        <record id="ir_cron_retry_failed_fbr_orders" model="ir.cron">
+            <field name="name">Retry Failed FBR Orders</field>
+            <field name="model_id" ref="model_pos_order"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_retry_failed_fbr_orders()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="True"/>
+        </record>
+    </data>
+</odoo>

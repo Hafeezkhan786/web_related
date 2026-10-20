@@ -1,0 +1,14 @@
+<odoo>
+    <record id="pos_config_view_form_inherit_block_negative" model="ir.ui.view">
+        <field name="name">pos.config.form.inherit.psae.block.negative.pos</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.pos_config_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//page//div[hasclass('o_settings_container')]" position="inside">
+                <setting name="negative_qty_settings" string="Negative Qty Block Source">
+                    <field name="negative_qty_block_source" groups="base.group_system" />
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="sng_pos_fbr_integration.OrderReceipt">
+
+
+        <div class="pos-receipt">
+            <t t-if="env.services.pos.config.logo">
+                <img t-att-src="'data:image/png;base64,' + env.services.pos.config.logo"
+                     alt="Logo" class="pos-receipt-logo"/>
+                <br/>
+             </t>
+            <div style="font-size:11px; text-align:center; line-height:1.6;">
+        <div>Whatsapp# 0337-8314-428</div>
+                <div>Whatsapp# 0321-0477-759</div>
+                <br/>
+                <div>NTN# 9352512-0</div>
+                <div>STRN# 3277876341689</div>
+         </div>
+            <br/>
+            <!--<div style="font-size:13px; text-align:center;">-->
+            <!--    <t t-esc="env.services.pos.company.name"/><br />-->
+            <!--    Phone:<t t-esc="env.services.pos.company.phone || ''"/><br />-->
+            <!--</div>-->
+            <!--<br/>-->
+            <div style="font-size:13px; text-align:center;">
+                Date :
+                <t t-if="props.receipt.date">
+                    <t t-esc="props.receipt.date"/>
+                </t>
+                <t t-else="">
+                    <t t-esc="props.order.date_order"/>
+                </t>
+                <br/>
+                Order :
+                <t t-esc="props.order.name"/>
+                <br/>
+            </div>
+            <br/>
+            <div style="font-size:13px; text-align:center;">
+                <t t-if="props.receipt.headerData">
+                    Cashier :  <t t-esc='props.receipt.headerData.cashier'/>
+                </t>
+                <t t-else="">
+                    Cashier :  <t t-esc='env.services.pos.cashier.name'/>
+                </t>
+                <br/>
+                <t t-if="props.order.partner_id">
+                Customer :  <t t-esc='props.order.partner_id.name' style="font-style:bold"/>
+                <br/>
+                </t>
+                <t t-if="props.receipt.header_note">
+                    <t t-esc="props.receipt.header_note"/>
+                    <br/>
+                </t>
+            </div>
+            <br/>
+            <div>
+                <table class='receipt-orderlines' style="font-size:15px; border-style:double;
+            border-left:none; border-right:none; border-bottom:none; width:100%;">
+                <colgroup>
+                    <col width='40%'/>
+                    <col width='30%'/>
+                    <col width='30%'/>
+                </colgroup>
+                    <tr style="border-bottom:1px dashed black;">
+                    <th style="text-align:left;">Product</th>
+                        <th style="text-align:right;">Qty</th>
+                        <th style="text-align:right;">Amount</th>
+                </tr>
+                    <t t-if="props.order and props.order.length and props.order and props.order.pos and props.order.pos.mainScreen and props.order.pos.mainScreen.props and props.order.pos.mainScreen.props.order and props.order.pos.mainScreen.props.order.orderlines and props.order.pos.mainScreen.props.order.orderlines.length">
+    <t t-if="props.order.pos.mainScreen.props">
+        <tr t-foreach="props.order.pos.mainScreen.props.order.orderlines" t-as="orderline" t-key="index_orderlines">
+            <td style="padding-top:1%; padding-bottom:1%; text-align:left;">
+                <div><t t-esc="orderline.productName"/></div>
+                <div style="font-size:11px; color:#808080;">
+                    <t t-esc="orderline.qty"/>
+                    x
+
+                    <!-- DISCOUNT CONDITION START -->
+                    <t t-if="orderline.discountPercentage &gt; 0">
+                        <span style="text-decoration: line-through; margin-right: 4px;">
+                            <t t-esc="orderline.originalUnitPrice"/>
+                        </span>
+                        <t t-esc="orderline.unitPrice"/> <t t-esc="orderline.unit"/>
+                    </t>
+                    <t t-else="">
+                        <t t-esc="orderline.unitPrice"/> <t t-esc="orderline.unit"/>
+                    </t>
+                    <!-- DISCOUNT CONDITION END -->
+                    <t t-if="orderline.packaging"> [<t t-esc="orderline.packaging"/>]</t>
+                    <!--                    <t t-if="orderline.discount and orderline.discount !== '0'">-->
+                    <!--                         <span style="font-style:italic; margin-left: 4px;">-->
+                    <!--                            (<t t-esc="orderline.discount"/>% discount)-->
+                    <!--                        </span>-->
+                    <!--                    </t>-->
+                </div>
+                <t t-if="orderline.customerNote">
+                    <div style="font-size:14px;" t-esc="orderline.customerNote"/>
+                </t>
+            </td>
+            <td style="text-align:right; font-size:14px; vertical-align:top;">
+                <t t-esc="orderline.qty"/>
+            </td>
+            <td style="text-align:right; font-size:14px; vertical-align:top;">
+                <t t-esc="orderline.price"/>
+            </td>
+        </tr>
+    </t>
+</t>
+                    <t t-else="">
+    <t t-if="props.orderlines and props.orderlines.length">
+        <tr t-foreach="props.orderlines" t-as="orderline" t-key="orderline_index">
+            <td style="padding-top:1%; padding-bottom:1%; text-align:left;">
+                <div><t t-esc="orderline.productName"/></div>
+                <div style="font-size:11px; color:#808080;">
+                    <t t-esc="orderline.qty"/>
+                    x
+
+                    <!-- DISCOUNT CONDITION START -->
+                    <t t-if="orderline.discountPercentage &gt; 0">
+                        <span style="text-decoration: line-through; margin-right: 4px;">
+                            <t t-esc="orderline.originalUnitPrice"/>
+                        </span>
+                        <t t-esc="orderline.unitPrice"/> <t t-esc="orderline.unit"/>
+                    </t>
+                    <t t-else="">
+                        <t t-esc="orderline.unitPrice"/> <t t-esc="orderline.unit"/>
+                    </t>
+                    <!-- DISCOUNT CONDITION END -->
+                    <t t-if="orderline.packaging"> [<t t-esc="orderline.packaging"/>]</t>
+                    <!--                    <t t-if="orderline.discount and orderline.discount !== '0'">-->
+                    <!--                         <span style="font-style:italic; margin-left: 4px;">-->
+                    <!--                            (<t t-esc="orderline.discount"/>% discount)-->
+                    <!--                        </span>-->
+                    <!--                    </t>-->
+                </div>
+                <t t-if="orderline.customerNote">
+                    <div style="font-size:14px;" t-esc="orderline.customerNote"/>
+                </t>
+            </td>
+            <td style="text-align:right; font-size:14px; vertical-align:top;">
+                <t t-esc="orderline.qty"/>
+            </td>
+            <td style="text-align:right; font-size:14px; vertical-align:top;">
+                <t t-esc="orderline.price"/>
+            </td>
+        </tr>
+    </t>
+</t>
+                </table>
+            </div>
+            <br/>
+            <div style="padding-top:6px;">
+                <!--<t t-set='taxincluded' t-value='Math.abs(props.receipt.amount_total - props.receipt.total_with_tax) &lt;= 0.000001' />-->
+                <!--<t t-if='!taxincluded'>-->
+                <!--    <br/>-->
+                <!--    <div style="font-weight:700; font-size:14px; border-top:1px dashed;"><span style="margin-left:40%;">Subtotal : </span><span t-esc='env.utils.formatCurrency(props.data.total_without_tax)' class="pos-receipt-right-align"/></div>-->
+                <!--    <t t-if="props.data.tax_details">-->
+                <!--        <t t-foreach='props.data.tax_details' t-as='tax' t-key="index_tax_details">-->
+                <!--            <div style="font-weight:700; font-size:14px;">-->
+                <!--                <span style="margin-left:40%;"><t t-esc='tax.tax.name' /></span>-->
+                <!--                <span t-esc='tax.amount' class="pos-receipt-right-align"/>-->
+                <!--            </div>-->
+                <!--        </t>-->
+                <!--    </t>-->
+                <!--</t>-->
+                <!-- Total -->
+                <br/>
+                <div style="font-weight:700; font-size:14px;">
+                    <span style="margin-left:40%;">TOTAL : </span>
+                    <span t-esc='env.utils.formatCurrency(props.data.amount_total)' class="pos-receipt-right-align"/>
+                </div>
+                <br/>
+                <br/>
+            </div>
+            <!-- Payment Lines -->
+            <t t-foreach='props.paymentlines' t-as='line' t-key="index_paymentlines">
+                <div style="font-size:14px; border-top:1px dashed; padding-top:5px;">
+                    <span style="margin-left:40%;"><t t-esc='line.name' /></span>
+                    <span t-esc='line.amount' class="pos-receipt-right-align"/>
+                </div>
+            </t>
+            <br/>
+            <div class="receipt-change" style="font-size:14px;">
+            <span style="margin-left:40%;">CHANGE : </span>
+                <span t-esc='env.utils.formatCurrency(props.receipt.change)' class="pos-receipt-right-align"/>
+            </div>
+            <br/>
+            <!-- Extra Payment Info -->
+            <t t-if='props.receipt.total_discount'>
+                <div style="font-size:14px; border-top:1px dashed; padding-top:5px;">
+                    <span style="margin-left:40%;">Discounts : </span>
+                    <span t-esc='props.receipt.total_discount' class="pos-receipt-right-align"/>
+                </div>
+            </t>
+            <t t-if='taxincluded'>
+                <t t-if="props.receipt.tax_details">
+                    <t t-foreach='props.receipt.tax_details' t-as='tax' t-key="index_receipt_tax_details">
+                        <div style="font-size:14px;">
+                            <span style="margin-left:40%;"><t t-esc='tax.tax.name' /></span>
+                            <span t-esc='tax.amount' class="pos-receipt-right-align"/>
+                        </div>
+                    </t>
+                 </t>
+                <div style="font-size:14px;">
+                    <span style="margin-left:40%;">Total Taxes : </span>
+                    <span t-esc='props.receipt.total_tax' class="pos-receipt-right-align"/>
+                </div>
+            </t>
+            <div class='before-footer'/>
+            <!-- Footer -->
+            <div t-if='props.receipt.footer_html' style="text-align:center; font-size:14px;">
+                <t t-raw='props.receipt.footer_html'/>
+            </div>
+            <div t-if='!props.receipt.footer_html and props.receipt.footer' style="text-align:center; font-size:14px;">
+                <br/>
+                <t t-esc='props.receipt.footer'/>
+                <br/>
+                <br/>
+            </div>
+            <!-- ============================================ -->
+            <!-- FBR INVOICE INFORMATION SECTION START        -->
+            <!-- ============================================ -->
+            <t t-if="props.data.fbr_invoice_number">
+        <div style="margin-top: 20px; text-align: center; border-top: 2px solid #000;
+                    border-bottom: 2px solid #000; padding: 15px 10px;">
+
+            <!-- FBR Section Heading -->
+            <div style="font-weight: bold; font-size: 16px; margin-bottom: 15px;
+                        text-transform: uppercase; letter-spacing: 1px;">
+                FBR INVOICE INFORMATION
+            </div>
+
+            <!-- FBR Logo -->
+            <div style="text-align: center; margin-bottom: 10px;">
+                <img t-if="props.data.has_fbr_logo"
+                     t-attf-src="/web/image?model=res.company&amp;id={{props.data.fbr_company_id}}&amp;field=fbr_pos_logo"
+                     style="width: 60px; height: auto;"
+                     alt="FBR Logo"/>
+                <img t-if="!props.data.has_fbr_logo"
+                     src="/sng_pos_fbr_integration/static/img/fbr_logo.png"
+                     style="width: 60px; height: auto;"
+                     alt="Default FBR Logo"/>
+            </div>
+
+            <!-- Invoice Number -->
+            <div style="text-align: center; margin-bottom: 5px;">
+                <div style="font-size: 11px; color: #333; font-weight: 600; margin-bottom: 2px;">
+                    INVOICE NO:
+                </div>
+                <div style="font-size: 14px; font-weight: bold; color: #000; letter-spacing: 0.5px;">
+                    <t t-esc="props.data.fbr_invoice_number"/>
+                </div>
+            </div>
+
+            <!-- Verified by FBR Badge -->
+            <div style="text-align: center; margin-bottom: 10px;">
+                <div style="font-size: 10px; color: #28a745; font-weight: 600;">
+                    ✓ VERIFIED BY FBR
+                </div>
+            </div>
+
+            <!-- QR Code for Verification -->
+            <div style="text-align: center; margin-top: 10px;">
+                <img t-attf-src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&amp;data={{props.data.fbr_invoice_number}}"
+                     style="width: 70px; height: 70px; border: 1px solid #ccc; padding: 3px;"
+                     alt="FBR QR Code"/>
+                <div style="font-size: 9px; color: #666; margin-top: 5px; font-weight: 500;">
+                    Scan to verify invoice
+                </div>
+            </div>
+        </div>
+    </t>
+
+            <!-- FBR Status Section (shown only when status is NOT 'posted') -->
+            <t t-if="props.data.fbr_status and props.data.fbr_status != 'posted'">
+        <div style="margin-top: 15px; text-align: center;
+                    border-top: 1px dashed #ccc; padding-top: 10px;">
+            <div style="font-weight: bold; font-size: 14px; margin-bottom: 8px;">
+                FBR STATUS
+            </div>
+
+            <!-- Failed Status -->
+            <div t-if="props.data.fbr_status == 'failed'"
+                 style="color: #dc3545; font-size: 12px;">
+                ❌ FBR Posting Failed
+                <div t-if="props.data.fbr_error_message"
+                     style="font-size: 10px; margin-top: 4px;">
+                    <t t-esc="props.data.fbr_error_message"/>
+                </div>
+            </div>
+
+            <!-- Pending Status -->
+            <div t-if="props.data.fbr_status == 'pending'"
+                 style="color: #ffc107; font-size: 12px;">
+                ⏳ Pending FBR Response
+            </div>
+
+            <!-- Draft Status -->
+            <div t-if="props.data.fbr_status == 'draft'"
+                 style="color: #6c757d; font-size: 12px;">
+                📝 Not sent to FBR
+            </div>
+        </div>
+    </t>
+            <!-- ============================================ -->
+            <!-- FBR INVOICE INFORMATION SECTION END          -->
+            <!-- ============================================ -->
+
+            <div class='after-footer' style="font-size:14px;">
+                <t t-foreach='props.paymentlines' t-as='line' t-key="index_payment">
+                    <t t-if='line.ticket'>
+                        <br/>
+                        <div class="pos-payment-terminal-receipt">
+                            <t t-raw='line.ticket'/>
+                        </div>
+                    </t>
+                </t>
+            </div>
+            <br/>
+            <br/>
+            <div style="font-size:14px; text-align:center;">
+                Thank You... Please Visit Again ...
+            </div>
+        </div>
+    </t>
+    <!--    <t t-name="tt_pos_fbr_integration.OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension">-->
+    <!--            <xpath expr="//div[hasclass('pos-receipt')]" position="inside">-->
+    <!--                &lt;!&ndash; Hide Untaxed Amount and Withholding Tax when FBR is active &ndash;&gt;-->
+    <!--                <xpath expr="//t[t-if='receipt.untaxed_amount !== receipt.total_with_tax']" position="attributes">-->
+    <!--                    <attribute name="t-if">!props.data.fbr_invoice_number and receipt.untaxed_amount !== receipt.total_with_tax</attribute>-->
+    <!--                </xpath>-->
+    <!--                <xpath expr="//t[t-if='receipt.withholding_tax_amount !== 0']" position="attributes">-->
+    <!--                    <attribute-->
+    <!--                            name="t-if">!props.data.fbr_invoice_number and receipt.withholding_tax_amount !== 0</attribute>-->
+    <!--                </xpath>-->
+
+    <!--                &lt;!&ndash; FBR Invoice Information Section &ndash;&gt;-->
+    <!--                <div t-if="props.data.fbr_invoice_number"-->
+    <!--                     style="margin-top: 20px; text-align: center; border-top: 2px solid #000; border-bottom: 2px solid #000; padding: 15px 10px;">-->
+    <!--                    <div style="font-weight: bold; font-size: 16px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">-->
+    <!--                        FBR INVOICE INFORMATION-->
+    <!--                    </div>-->
+
+    <!--                    &lt;!&ndash; FBR Logo &ndash;&gt;-->
+    <!--                    <div style="text-align: center; margin-bottom: 10px;">-->
+    <!--                        <img t-if="props.data.has_fbr_logo"-->
+    <!--                             t-attf-src="/web/image?model=res.company&amp;id={{props.data.fbr_company_id}}&amp;field=fbr_pos_logo"-->
+    <!--                             style="width: 60px; height: auto;"-->
+    <!--                             alt="FBR Logo"/>-->
+    <!--                        <img t-if="!props.data.has_fbr_logo"-->
+    <!--                             src="/sng_pos_fbr_integration/static/img/fbr_logo.png"-->
+    <!--                             style="width: 60px; height: auto;"-->
+    <!--                             alt="Default FBR Logo"/>-->
+    <!--                    </div>-->
+
+    <!--                    &lt;!&ndash; Invoice Number &ndash;&gt;-->
+    <!--                    <div style="text-align: center; margin-bottom: 5px;">-->
+    <!--                        <div style="font-size: 11px; color: #333; font-weight: 600; margin-bottom: 2px;">INVOICE NO:</div>-->
+    <!--                        <div style="font-size: 14px; font-weight: bold; color: #000; letter-spacing: 0.5px;">-->
+    <!--                            <t t-esc="props.data.fbr_invoice_number"/>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+
+    <!--                    &lt;!&ndash; Verified by FBR &ndash;&gt;-->
+    <!--                    <div style="text-align: center; margin-bottom: 10px;">-->
+    <!--                        <div style="font-size: 10px; color: #28a745; font-weight: 600;">-->
+    <!--                            ✓ VERIFIED BY FBR-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+
+    <!--                    &lt;!&ndash; QR Code for verification &ndash;&gt;-->
+    <!--                    <div t-if="props.data.fbr_invoice_number" style="text-align: center; margin-top: 10px;">-->
+    <!--                        <img t-attf-src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&amp;data={{props.data.fbr_invoice_number}}"-->
+    <!--                             style="width: 70px; height: 70px; border: 1px solid #ccc; padding: 3px;"-->
+    <!--                             alt="FBR QR Code"/>-->
+    <!--                        <div style="font-size: 9px; color: #666; margin-top: 5px; font-weight: 500;">-->
+    <!--                            Scan to verify invoice-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+
+    <!--                &lt;!&ndash; FBR Status Information &ndash;&gt;-->
+    <!--                <div t-if="props.data.fbr_status and props.data.fbr_status != 'posted'"-->
+    <!--                     style="margin-top: 15px; text-align: center; border-top: 1px dashed #ccc; padding-top: 10px;">-->
+    <!--                    <div style="font-weight: bold; font-size: 14px; margin-bottom: 8px;">-->
+    <!--                        FBR STATUS-->
+    <!--                    </div>-->
+    <!--                    <div t-if="props.data.fbr_status == 'failed'"-->
+    <!--                         style="color: #dc3545; font-size: 12px;">-->
+    <!--                        ❌ FBR Posting Failed-->
+    <!--                        <div t-if="props.data.fbr_error_message" style="font-size: 10px; margin-top: 4px;">-->
+    <!--                            <t t-esc="props.data.fbr_error_message"/>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                    <div t-if="props.data.fbr_status == 'pending'"-->
+    <!--                         style="color: #ffc107; font-size: 12px;">-->
+    <!--                        ⏳ Pending FBR Response-->
+    <!--                    </div>-->
+    <!--                    <div t-if="props.data.fbr_status == 'draft'"-->
+    <!--                         style="color: #6c757d; font-size: 12px;">-->
+    <!--                        📝 Not sent to FBR-->
+    <!--                    </div>-->
+    <!--                </div>-->
+    <!--            </xpath>-->
+    <!--        </t>-->
+</templates>

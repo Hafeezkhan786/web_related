@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Rating Search View Extension with Approval Filters -->
+    <record id="view_rating_rating_search_guest_product" model="ir.ui.view">
+        <field name="name">rating.rating.search.guest.product</field>
+        <field name="model">rating.rating</field>
+        <field name="inherit_id" ref="rating.rating_rating_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='my_ratings']" position="after">
+                <separator/>
+                <filter string="Pending Approval" name="pending_approval" domain="[('is_approved', '=', False)]"/>
+                <filter string="Approved Reviews" name="approved_reviews" domain="[('is_approved', '=', True)]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Rating Tree/List View -->
+    <record id="view_rating_rating_tree_guest_product" model="ir.ui.view">
+        <field name="name">rating.rating.tree.guest.product</field>
+        <field name="model">rating.rating</field>
+        <field name="arch" type="xml">
+            <list string="Product Reviews" default_order="create_date desc" decoration-warning="not is_approved" decoration-success="is_approved">
+                <field name="create_date" string="Date"/>
+                <field name="partner_id" string="Customer"/>
+                <field name="res_name" string="Product"/>
+                <field name="rating" string="Stars"/>
+                <field name="rating_text" string="Rating Level" widget="badge" decoration-danger="rating_text == 'ko'" decoration-warning="rating_text == 'ok'" decoration-success="rating_text == 'top'"/>
+                <field name="feedback" string="Review Content"/>
+                <field name="is_approved" widget="boolean_toggle" string="Approved"/>
+                <button name="action_approve" type="object" string="Approve" class="btn-success" icon="fa-check" invisible="is_approved"/>
+                <button name="action_reject" type="object" string="Reject" class="btn-danger" icon="fa-times" invisible="not is_approved"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Rating Form View -->
+    <record id="view_rating_rating_form_guest_product" model="ir.ui.view">
+        <field name="name">rating.rating.form.guest.product</field>
+        <field name="model">rating.rating</field>
+        <field name="arch" type="xml">
+            <form string="Product Review">
+                <header>
+                    <button name="action_approve" type="object" string="Approve Review" class="btn-primary" invisible="is_approved"/>
+                    <button name="action_reject" type="object" string="Reject / Unapprove" class="btn-secondary" invisible="not is_approved"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Approved" bg_color="bg-success" invisible="not is_approved"/>
+                    <widget name="web_ribbon" title="Pending Approval" bg_color="bg-warning" invisible="is_approved"/>
+                    <group>
+                        <group string="Product &amp; Rating">
+                            <field name="res_name" string="Product Name" readonly="1"/>
+                            <field name="rating" string="Star Rating" readonly="1"/>
+                            <field name="rating_text" string="Rating Level" readonly="1"/>
+                            <field name="create_date" string="Submitted Date" readonly="1"/>
+                            <field name="is_approved" widget="boolean_toggle" string="Approved Status"/>
+                        </group>
+                        <group string="Customer Information">
+                            <field name="partner_id" string="Customer Partner" readonly="1"/>
+                            <field name="feedback" string="Review Content" readonly="1"/>
+                            <field name="publisher_comment" string="Admin Notes / Response"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for Guest Product Reviews Approval -->
+    <record id="action_guest_product_rating_approval" model="ir.actions.act_window">
+        <field name="name">Product Reviews</field>
+        <field name="res_model">rating.rating</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('res_model', '=', 'product.template')]</field>
+        <field name="context">{'search_default_pending_approval': 1}</field>
+        <field name="search_view_id" ref="rating.rating_rating_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No product reviews pending approval!
+            </p>
+            <p>
+                When guest or visitor customers rate products on your website, their submissions will appear here for your review and approval before being published.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_guest_product_rating_approval_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_rating_rating_tree_guest_product"/>
+        <field name="act_window_id" ref="action_guest_product_rating_approval"/>
+    </record>
+
+    <record id="action_guest_product_rating_approval_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_rating_rating_form_guest_product"/>
+        <field name="act_window_id" ref="action_guest_product_rating_approval"/>
+    </record>
+
+    <!-- Menuitem in Website -> Products -> Guest Product Reviews -->
+    <menuitem id="menu_guest_product_reviews"
+              name="Product Reviews"
+              parent="website_sale.menu_catalog"
+              action="action_guest_product_rating_approval"
+              sequence="30"/>
+
+</odoo>
