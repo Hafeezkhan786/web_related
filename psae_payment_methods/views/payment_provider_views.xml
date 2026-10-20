@@ -1,0 +1,12 @@
+<odoo>
+    <record id="payment_provider_form" model="ir.ui.view">
+        <field name="name">payment.provider.form.inherit.psae.payment.methods</field>
+        <field name="model">payment.provider</field>
+        <field name="inherit_id" ref="payment.payment_provider_form"/>
+        <field name="arch" type="xml">
+            <field name="available_country_ids" position="after">
+                <field name="available_state_ids" widget="many2many_tags" placeholder="Select states. Leave empty to make available everywhere." options="{'no_create': True}"/>
+            </field>
+        </field>
+    </record>
+</odoo>

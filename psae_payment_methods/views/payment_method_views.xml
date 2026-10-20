@@ -1,0 +1,21 @@
+<odoo>
+    <record id="payment_method_form" model="ir.ui.view">
+        <field name="name">payment.method.form.inherit.psae.payment.methods</field>
+        <field name="model">payment.method</field>
+        <field name="inherit_id" ref="payment.payment_method_form"/>
+        <field name="arch" type="xml">
+            <label for="supported_currency_ids" position="before">
+                <label for="supported_state_ids"/>
+                <div>
+                    <field name="supported_state_ids" class="oe_inline" widget="many2many_tags" readonly="1"/>
+                    <span class="oe_inline text-muted" invisible="supported_state_ids">
+                        All states are supported.
+                    </span>
+                </div>
+            </label>
+            <xpath expr="//page[@name='configuration']//field[@name='supported_country_ids']" position="after">
+                <field name="supported_state_ids" widget="many2many_tags" placeholder="Select states. Leave empty to allow any."/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

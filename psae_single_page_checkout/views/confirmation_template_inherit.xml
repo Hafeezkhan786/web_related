@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="confirmation_customer_details_inherit"
+              inherit_id="website_sale.confirmation"
+              name="Custom Address Layout for Confirmation">
+
+        <xpath expr="//div[@id='oe_structure_website_sale_confirmation_1']" position="inside">
+            <div class="container mt-4">
+                <div t-if="order">
+
+                    <!-- ─── 1. Contact Information ─── -->
+                    <div class="card bg-light border-0 mb-3">
+                        <div class="card-body">
+                            <h6 class="text-uppercase text-muted mb-3">
+                                <i class="oi oi-user me-2"/>Contact Information
+                            </h6>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <p class="mb-1">
+                                        <strong>Name:</strong>
+                                        <span t-field="order.partner_id.name"/>
+                                    </p>
+                                </div>
+                                <div class="col-md-3" t-if="order.partner_id.phone">
+                                    <p class="mb-1">
+                                        <strong>Phone:</strong>
+                                        <span t-field="order.partner_id.phone"/>
+                                    </p>
+                                </div>
+                                <div class="col-md-3" t-if="order.partner_id.custom_mobile">
+                                    <p class="mb-1">
+                                        <strong>WhatsApp:</strong>
+                                        <span t-field="order.partner_id.custom_mobile"/>
+                                    </p>
+                                </div>
+                                <div class="col-md-3" t-if="order.partner_id.email">
+                                    <p class="mb-1">
+                                        <strong>Email:</strong>
+                                        <span t-field="order.partner_id.email"/>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ─── 2. Delivery & Billing Card (Two Column Style) ─── -->
+                    <div class="card shadow-sm border rounded-3 mb-3">
+                        <div class="card-body p-4">
+                            <div class="row">
+
+                                <!-- Delivery Column -->
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    <span class="d-inline-block mb-3"
+                                          style="background-color:#ffffff;
+                                                 color:#0dcaf0;
+                                                 border:2px solid #0dcaf0;
+                                                 font-weight:600;
+                                                 font-size:0.85rem;
+                                                 padding:6px 18px;
+                                                 border-radius:50px;
+                                                 line-height:1;">
+                                        Delivery
+                                    </span>
+                                    <h6 class="fw-bold mb-2 mt-2" style="font-size:1rem;color:#212529;">
+                                        <span t-field="order.partner_shipping_id.name"/>
+                                    </h6>
+                                    <div style="line-height:1.7;color:#333;">
+                                        <div t-if="order.partner_shipping_id.street">
+                                            <span t-field="order.partner_shipping_id.street"/>
+                                        </div>
+                                        <div t-if="order.partner_shipping_id.street2">
+                                            <span t-field="order.partner_shipping_id.street2"/>
+                                        </div>
+                                        <div t-if="order.partner_shipping_id.city or order.partner_shipping_id.zip">
+                                            <span t-if="order.partner_shipping_id.city"
+                                                  t-field="order.partner_shipping_id.city"/>
+                                            <t t-if="order.partner_shipping_id.zip">
+                                                <span></span>
+                                                <span t-field="order.partner_shipping_id.zip"/>
+                                            </t>
+                                        </div>
+                                        <div t-if="order.partner_shipping_id.country_id">
+                                            <span t-field="order.partner_shipping_id.country_id.name"/>
+                                        </div>
+                                        <div t-if="order.partner_shipping_id.phone" class="mt-2">
+                                            <span t-field="order.partner_shipping_id.phone"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Billing Column -->
+                                <div class="col-md-6">
+                                    <span class="d-inline-block mb-3"
+                                          style="background-color:#ffffff;
+                                                 color:#0dcaf0;
+                                                 border:2px solid #0dcaf0;
+                                                 font-weight:600;
+                                                 font-size:0.85rem;
+                                                 padding:6px 18px;
+                                                 border-radius:50px;
+                                                 line-height:1;">
+                                        Billing
+                                    </span>
+                                    <h6 class="fw-bold mb-2 mt-2" style="font-size:1rem;color:#212529;">
+                                        <span t-field="order.partner_invoice_id.name"/>
+                                    </h6>
+                                    <div style="line-height:1.7;color:#333;">
+                                        <div t-if="order.partner_invoice_id.street">
+                                            <span t-field="order.partner_invoice_id.street"/>
+                                        </div>
+                                        <div t-if="order.partner_invoice_id.street2">
+                                            <span t-field="order.partner_invoice_id.street2"/>
+                                        </div>
+                                        <div t-if="order.partner_invoice_id.city or order.partner_invoice_id.zip">
+                                            <span t-if="order.partner_invoice_id.city"
+                                                  t-field="order.partner_invoice_id.city"/>
+                                            <t t-if="order.partner_invoice_id.zip">
+                                                <span></span>
+                                                <span t-field="order.partner_invoice_id.zip"/>
+                                            </t>
+                                        </div>
+                                        <div t-if="order.partner_invoice_id.country_id">
+                                            <span t-field="order.partner_invoice_id.country_id.name"/>
+                                        </div>
+                                        <div t-if="order.partner_invoice_id.phone" class="mt-2">
+                                            <span t-field="order.partner_invoice_id.phone"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ─── 3. Order Number ─── -->
+                    <div class="mb-3">
+                        <span class="text-muted fw-semibold" style="font-size:0.95rem;">
+                            Order:
+                            <strong>
+                                <span t-field="order.name"/>
+                            </strong>
+                        </span>
+                    </div>
+
+                    <!-- ─── 4. Ordered Products Table ─── -->
+                    <div class="card shadow-sm border rounded-3">
+                        <div class="card-body p-4">
+                            <h6 class="text-uppercase text-muted mb-3 fw-bold">Ordered Products</h6>
+                            <div class="table-responsive">
+                                <table class="table table-sm align-middle mb-0">
+                                    <thead style="background-color:#f8f9fa;">
+                                        <tr>
+                                            <th>Product</th>
+                                            <th class="text-center">Qty</th>
+                                            <th class="text-end">Unit Price</th>
+                                            <th class="text-end">Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="order.order_line.filtered(lambda l: not l.is_delivery and l.product_id)"
+                                            t-as="line">
+                                            <td>
+                                                <span t-field="line.product_id.display_name"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <span t-field="line.product_uom_qty"/>
+                                            </td>
+                                            <td class="text-end">
+                                                <span t-field="line.price_unit"
+                                                      t-options='{"widget":"monetary","display_currency":order.currency_id}'/>
+                                            </td>
+                                            <td class="text-end">
+                                                <strong>
+                                                    <span t-field="line.price_subtotal"
+                                                          t-options='{"widget":"monetary","display_currency":order.currency_id}'/>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr t-if="order.amount_delivery">
+                                            <td colspan="3" class="text-end">
+                                                <strong>Shipping:</strong>
+                                            </td>
+                                            <td class="text-end">
+                                                <span t-field="order.amount_delivery"
+                                                      t-options='{"widget":"monetary","display_currency":order.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-end">
+                                                <strong>Subtotal:</strong>
+                                            </td>
+                                            <td class="text-end">
+                                                <span t-field="order.amount_untaxed"
+                                                      t-options='{"widget":"monetary","display_currency":order.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="order.amount_tax">
+                                            <td colspan="3" class="text-end">
+                                                <strong>Taxes:</strong>
+                                            </td>
+                                            <td class="text-end">
+                                                <span t-field="order.amount_tax"
+                                                      t-options='{"widget":"monetary","display_currency":order.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                        <tr style="background-color:#e7f3ff;">
+                                            <td colspan="3" class="text-end">
+                                                <h5 class="mb-0">Total:</h5>
+                                            </td>
+                                            <td class="text-end">
+                                                <h5 class="mb-0 text-primary">
+                                                    <span t-field="order.amount_total"
+                                                          t-options='{"widget":"monetary","display_currency":order.currency_id}'/>
+                                                </h5>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+<!--            &lt;!&ndash; Hide the default Odoo billing box at bottom (rendered after Payment Information) &ndash;&gt;-->
+<!--            <script>-->
+<!--                document.addEventListener("DOMContentLoaded", function () {-->
+<!--                var billingEl = document.getElementById("delivery_and_billing");-->
+<!--                if (billingEl) {-->
+<!--                var wrapper = billingEl.closest(".card");-->
+<!--                if (wrapper &amp;&amp; wrapper.parentElement) {-->
+<!--                wrapper.parentElement.style.display = "none";-->
+<!--                }-->
+<!--                }-->
+<!--                });-->
+<!--            </script>-->
+        </xpath>
+
+    </template>
+</odoo>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="products_item_direct_canonical_link" inherit_id="website_sale.products_item" name="Direct Product Canonical Link">
+        <xpath expr="/*[1]/*[1]" position="before">
+            <t t-set="product_href" t-value="keep(product.website_url, category=0)"/>
+        </xpath>
+    </template>
+</odoo>

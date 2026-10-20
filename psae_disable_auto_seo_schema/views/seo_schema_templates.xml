@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Enforce Index, Follow meta tag on website layout to remove any accidental noindex -->
+    <template id="enforce_index_follow_robots" inherit_id="website.layout" priority="999">
+        <xpath expr="//meta[@name='robots']" position="replace">
+            <meta name="robots" content="index, follow"/>
+        </xpath>
+    </template>
+
+    <!-- 1. GLOBAL PAGE SCHEMA (Injected into <head> for any Website Page) -->
+    <template id="global_custom_page_schema" inherit_id="website.layout" priority="99">
+        <xpath expr="//head" position="inside">
+            <t t-if="main_object and 'custom_seo_schema' in main_object._fields">
+                <t t-set="page_schema" t-value="main_object.get_seo_schema_markup()"/>
+                <t t-if="page_schema">
+                    <t t-out="page_schema"/>
+                </t>
+                <t t-elif="main_object._name == 'website.page'">
+                    <t t-set="auto_page_schema" t-value="main_object.get_dynamic_seo_schema_markup(request.httprequest.url, website)"/>
+                    <script type="application/ld+json">
+                        <t t-out="auto_page_schema"/>
+                    </script>
+                </t>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- 2. CATEGORY / SHOP PAGE SCHEMA -->
+    <template id="category_page_schema_markup" inherit_id="website_sale.products" name="Category Page Schema Markup">
+        <xpath expr="//div[@id='wrap']" position="inside">
+            <!-- Automatic FAQ Page Schema -->
+            <t t-if="category and 'category_faq' in category._fields">
+                <t t-set="cat_faq_schema" t-value="category.get_faq_seo_schema_markup()"/>
+                <t t-if="cat_faq_schema">
+                    <t t-out="cat_faq_schema"/>
+                </t>
+            </t>
+            <!-- Category CollectionPage / Custom Schema -->
+            <t t-if="category and 'custom_seo_schema' in category._fields">
+                <t t-set="cat_custom_schema" t-value="category.get_seo_schema_markup()"/>
+                <t t-if="cat_custom_schema">
+                    <t t-out="cat_custom_schema"/>
+                </t>
+                <t t-elif="not brand">
+                    <t t-set="cat_name" t-value="category.name if category else 'All Products'"/>
+                    <script type="application/ld+json">
+                    {
+                        "@context": "https://schema.org/",
+                        "@type": "CollectionPage",
+                        "name": "<t t-out="cat_name"/>",
+                        "url": "<t t-out="request.httprequest.url"/>",
+                        "description": "Browse <t t-out="cat_name"/> at Mr Medicine Mart"
+                    }
+                    </script>
+                </t>
+            </t>
+            <t t-elif="not brand">
+                <t t-set="cat_name" t-value="category.name if category else 'All Products'"/>
+                <script type="application/ld+json">
+                {
+                    "@context": "https://schema.org/",
+                    "@type": "CollectionPage",
+                    "name": "<t t-out="cat_name"/>",
+                    "url": "<t t-out="request.httprequest.url"/>",
+                    "description": "Browse <t t-out="cat_name"/> at Mr Medicine Mart"
+                }
+                </script>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- 3. PRODUCT PAGE SCHEMA (Dynamically rendered for ALL products) -->
+    <template id="product_page_schema" inherit_id="website_sale.product" name="Product Page Schema Markup">
+        <xpath expr="//div[@id='wrap']" position="inside">
+            <t t-if="product">
+                <t t-set="custom_schema" t-value="product.get_seo_schema_markup()"/>
+                <t t-if="custom_schema">
+                    <t t-out="custom_schema"/>
+                </t>
+                <t t-else="">
+                    <t t-set="auto_schema" t-value="product.get_dynamic_seo_schema_markup(request.httprequest.url, website.currency_id.name, website.image_url(product, 'image_1920'))"/>
+                    <script type="application/ld+json">
+                        <t t-out="auto_schema"/>
+                    </script>
+                </t>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- 4. BRAND PAGE SCHEMA -->
+    <template id="brand_page_schema_markup" inherit_id="website_sale.products" name="Brand Page Schema Markup">
+        <xpath expr="//div[@id='wrap']" position="inside">
+            <t t-if="not category and brand">
+                <t t-set="brand_name" t-value="brand.name"/>
+                <script type="application/ld+json">
+                {
+                    "@context": "https://schema.org/",
+                    "@type": "Brand",
+                    "name": "<t t-out="brand_name"/>",
+                    "url": "<t t-out="request.httprequest.url"/>"
+                }
+                </script>
+            </t>
+        </xpath>
+    </template>
+</odoo>

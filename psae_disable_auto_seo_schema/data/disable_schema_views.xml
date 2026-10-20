@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Remove Odoo core's default website_sale JSON-LD schemas to prevent duplicate markup.
+    -->
+    <template id="remove_website_sale_default_schema" inherit_id="website_sale.website_sale_layout" priority="99">
+        <xpath expr="//script[@type='application/ld+json']" position="replace"/>
+    </template>
+</odoo>

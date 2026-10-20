@@ -1,0 +1,12 @@
+<odoo>
+    <template id="report_saleorder_document" inherit_id="sale.report_saleorder_document">
+        <t t-set="layout_document_title" position="after">
+            <div class="row mb-4" id="payment_method_informations">
+                <div t-if="doc.payment_type_id" class="col" name="payment_method">
+                    <strong>Payment Method</strong>
+                    <div t-field="doc.payment_type_id.name"/>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

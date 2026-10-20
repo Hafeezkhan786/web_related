@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Single Page Checkout Layout Template replacing website_sale.checkout -->
+    <template id="single_checkout" name="Naheed Single Page Checkout" inherit_id="website_sale.checkout">
+        <xpath expr="//t[@t-call='website_sale.checkout_layout']" position="replace">
+            <t t-call="website.layout">
+                <t t-set="additional_title">Shop - Checkout</t>
+                <div id="wrap" class="o_naheed_checkout_page">
+                    <!-- Header Banner -->
+                    <div class="o_naheed_header">
+                        <div class="container d-flex align-items-center justify-content-between">
+                            <h1 class="header-title">Checkout</h1>
+                            <a href="/shop/cart" class="btn btn-outline-secondary btn-sm">
+                                <i class="oi oi-chevron-left me-1"/>
+                                Back to Cart
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="container">
+
+                        <!-- ============================================================ -->
+                        <!-- OPTIONAL LOGIN BANNER (only for guest / public users)       -->
+                        <!-- ============================================================ -->
+                        <t t-if="request.env.user._is_public()">
+                            <div class="naheed-login-banner mb-3 mt-3">
+                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 p-3 rounded shadow-sm"
+                                     style="background-color: #fff5f5; border: 1px solid #f5c6cb;">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fa fa-user-circle-o fa-lg text-danger"/>
+                                        <div>
+                                            <span class="fw-bold text-dark">
+                                                Already have an account?
+                                            </span>
+                                            <span class="text-muted small d-none d-md-inline ms-1">
+                                                Log in for faster checkout &amp; order history — or just continue as
+                                                guest below.
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <a t-att-href="'/web/login?redirect=/shop/checkout'"
+                                       class="btn btn-sm btn-danger fw-semibold">
+                                        <i class="fa fa-sign-in me-1"/>
+                                        Login
+                                    </a>
+                                </div>
+                            </div>
+                        </t>
+
+                        <form id="naheed_single_checkout_form" action="/shop/single_checkout/process_payment"
+                              method="post">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <input type="hidden" id="checkout_order_id" t-att-value="order.id"/>
+                            <input type="hidden" id="checkout_access_token" t-att-value="order.access_token"/>
+                            <input type="hidden" id="checkout_provider_id" name="provider_id" value=""/>
+                            <input type="hidden" id="checkout_payment_method_id" name="payment_method_id" value=""/>
+
+                            <div class="row">
+                                <!-- ============================================================ -->
+                                <!-- COLUMN 1: SHIPPING DETAILS, BILLING ADDRESS & SHIPPING METHOD -->
+                                <!-- ============================================================ -->
+                                <div class="col-lg-4 col-md-12">
+                                    <!-- Card 1: Shipping Details -->
+                                    <div class="naheed-card">
+                                        <h3 class="card-title-head">Shipping Details</h3>
+
+                                        <div class="form-group-naheed">
+                                            <label for="naheed_phone">Phone Number
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="input-group">
+                                                <input id="naheed_phone" type="tel" name="phone" class="form-control"
+                                                       placeholder="03XXXXXXXXX or +923XXXXXXXXX"
+                                                       t-att-value="partner.phone" required="required" maxlength="13"
+                                                       pattern="^(\+923[0-9]{9}|03[0-9]{9})$"
+                                                       title="Enter 03XXXXXXXXX (11 digits) or +923XXXXXXXXX (13 characters)"/>
+                                            </div>
+                                            <small class="text-muted">Format: +923XXXXXXXXX (13 characters) or
+                                                03XXXXXXXXX (11 digits)
+                                            </small>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-6 form-group-naheed">
+                                                <label for="naheed_first_name">First Name
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <input id="naheed_first_name" type="text" name="first_name"
+                                                       class="form-control"
+                                                       t-att-value="partner.name.split(' ')[0] if partner.name else ''"
+                                                       required="required"/>
+                                            </div>
+                                            <div class="col-6 form-group-naheed">
+                                                <label for="naheed_last_name">Last Name
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <input id="naheed_last_name" type="text" name="last_name"
+                                                       class="form-control"
+                                                       t-att-value="' '.join(partner.name.split(' ')[1:]) if partner.name and len(partner.name.split(' ')) > 1 else ''"
+                                                       required="required"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group-naheed">
+                                            <label for="naheed_city">City
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <input id="naheed_city" type="text" name="city" class="form-control"
+                                                   placeholder="Select or type city" t-att-value="partner.city or ''"
+                                                   required="required"/>
+                                        </div>
+
+                                        <div class="form-group-naheed">
+                                            <label for="naheed_address">Address &amp; House Number
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <input id="naheed_address" type="text" name="street" class="form-control"
+                                                   placeholder="House no. / building / street / area"
+                                                   t-att-value="partner.street" required="required"/>
+                                        </div>
+
+                                        <div class="form-group-naheed">
+                                            <label for="naheed_street2">Street 2 / Apartment
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <input id="naheed_street2" type="text" name="street2" class="form-control"
+                                                   placeholder="Apartment, suite, unit, building, floor, etc."
+                                                   t-att-value="partner.street2" required="required"/>
+                                        </div>
+
+                                        <div class="form-group-naheed">
+                                            <label for="naheed_country_id">Country
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <t t-set="pakistan"
+                                               t-value="request.env['res.country'].sudo().search([('code','=','PK')], limit=1)"/>
+                                            <select id="naheed_country_id" name="country_id" class="form-control"
+                                                    required="required">
+                                                <option t-att-value="pakistan.id" selected="selected">
+                                                    <t t-esc="pakistan.name"/>
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group-naheed">
+                                            <label for="naheed_state_id">State / Province
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <select id="naheed_state_id" name="state_id" class="form-select"
+                                                    required="required">
+                                                <option value="">Please select a region, state or province</option>
+                                                <t t-foreach="states" t-as="s">
+                                                    <option t-att-value="s.id"
+                                                            t-att-selected="partner.state_id and s.id == partner.state_id.id">
+                                                        <t t-esc="s.name"/>
+                                                    </option>
+                                                </t>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group-naheed">
+                                            <label for="naheed_email">Email Address
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <input id="naheed_email" type="email" name="email" class="form-control"
+                                                   placeholder="example@email.com" t-att-value="partner.email"
+                                                   required="required"/>
+                                        </div>
+
+                                        <div class="mb-3 form-group-naheed">
+                                            <label for="naheed_mobile" class="form-label fw-bold">
+                                                WhatsApp Number (Optional)
+                                            </label>
+                                            <input id="naheed_mobile"
+                                                   type="tel"
+                                                   name="mobile"
+                                                   class="form-control"
+                                                   placeholder="03XXXXXXXXX or +923XXXXXXXXX"
+                                                   t-att-value="partner.custom_mobile or ''"
+                                                   maxlength="13"
+                                                   pattern="^(\+923[0-9]{9}|03[0-9]{9})$"
+                                                   title="Enter 03XXXXXXXXX (11 digits) or +923XXXXXXXXX (13 characters)"/>
+                                        </div>
+
+                                        <div class="form-group-naheed">
+                                            <label for="naheed_zip">Zip Code (Optional)</label>
+                                            <input id="naheed_zip" type="text" name="zip" class="form-control"
+                                                   placeholder="Optional"/>
+                                        </div>
+                                    </div>
+
+                                    <!-- ═══════════════════════════════════════════════════════════ -->
+                                    <!-- ✅ Simple Billing Address Section (just a checkbox)         -->
+                                    <!-- ═══════════════════════════════════════════════════════════ -->
+                                    <!--                                    <div class="naheed-card">-->
+                                    <!--                                        <h3 class="card-title-head">Billing Address</h3>-->
+                                    <!--                                        <div class="form-check">-->
+                                    <!--                                            <input class="form-check-input"-->
+                                    <!--                                                   type="checkbox"-->
+                                    <!--                                                   id="naheed_billing_same_as_delivery"-->
+                                    <!--                                                   name="billing_same_as_delivery"-->
+                                    <!--                                                   value="1"/>-->
+                                    <!--                                            <label class="form-check-label" for="naheed_billing_same_as_delivery">-->
+                                    <!--                                                Same as delivery address-->
+                                    <!--                                            </label>-->
+                                    <!--                                        </div>-->
+                                    <!--                                        &lt;!&ndash; ✅ Billing Address Textarea (visible by default, hidden when checkbox checked) &ndash;&gt;-->
+                                    <!--                                        <div id="naheed_billing_address_wrapper" class="form-group-naheed">-->
+                                    <!--                                            <label for="naheed_billing_address">Enter Billing Address</label>-->
+                                    <!--                                            <textarea id="naheed_billing_address"-->
+                                    <!--                                                      name="billing_address"-->
+                                    <!--                                                      class="form-control"-->
+                                    <!--                                                      rows="3"-->
+                                    <!--                                                      placeholder="Write your billing address here..."></textarea>-->
+                                    <!--                                        </div>-->
+                                    <!--                                    </div>-->
+
+                                    <!-- ═══════════════════════════════════════════════════════════ -->
+                                    <!-- ✅ Billing Address Section with Full Fields                 -->
+                                    <!-- ═══════════════════════════════════════════════════════════ -->
+                                    <div class="naheed-card">
+                                        <h3 class="card-title-head">Billing Address</h3>
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input"
+                                                   type="checkbox"
+                                                   id="naheed_billing_same_as_delivery"
+                                                   name="billing_same_as_delivery"
+                                                   value="1"
+                                                   checked="checked"/>
+                                            <label class="form-check-label" for="naheed_billing_same_as_delivery">
+                                                Same as delivery address
+                                            </label>
+                                        </div>
+
+                                        <!-- ✅ Full Billing Address Fields (hidden by default when checkbox checked) -->
+                                        <div id="naheed_billing_address_wrapper" style="display: none;">
+
+                                            <div class="row">
+                                                <div class="col-6 form-group-naheed">
+                                                    <label for="naheed_billing_first_name">First Name
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <input id="naheed_billing_first_name" type="text"
+                                                           name="billing_first_name"
+                                                           class="form-control"/>
+                                                </div>
+                                                <div class="col-6 form-group-naheed">
+                                                    <label for="naheed_billing_last_name">Last Name
+                                                        <span class="text-danger">*</span>
+                                                    </label>
+                                                    <input id="naheed_billing_last_name" type="text"
+                                                           name="billing_last_name"
+                                                           class="form-control"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group-naheed">
+                                                <label for="naheed_billing_phone">Phone Number
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <input id="naheed_billing_phone" type="tel" name="billing_phone"
+                                                       class="form-control"
+                                                       placeholder="03XXXXXXXXX or +923XXXXXXXXX"
+                                                       maxlength="13"
+                                                       pattern="^(\+923[0-9]{9}|03[0-9]{9})$"
+                                                       title="Enter 03XXXXXXXXX (11 digits) or +923XXXXXXXXX (13 characters)"/>
+                                            </div>
+
+                                            <div class="form-group-naheed">
+                                                <label for="naheed_billing_street">Address &amp; House Number
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <input id="naheed_billing_street" type="text" name="billing_street"
+                                                       class="form-control"
+                                                       placeholder="House no. / building / street / area"/>
+                                            </div>
+
+                                            <div class="form-group-naheed">
+                                                <label for="naheed_billing_street2">Street 2 / Apartment
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <input id="naheed_billing_street2" type="text" name="billing_street2"
+                                                       class="form-control"
+                                                       placeholder="Apartment, suite, unit, building, floor, etc."/>
+                                            </div>
+
+                                            <div class="form-group-naheed">
+                                                <label for="naheed_billing_city">City
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <input id="naheed_billing_city" type="text" name="billing_city"
+                                                       class="form-control"
+                                                       placeholder="Enter city"/>
+                                            </div>
+
+                                            <div class="form-group-naheed">
+                                                <label for="naheed_billing_country_id">Country
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <t t-set="pakistan_billing"
+                                                   t-value="request.env['res.country'].sudo().search([('code','=','PK')], limit=1)"/>
+                                                <select id="naheed_billing_country_id" name="billing_country_id"
+                                                        class="form-control">
+                                                    <option t-att-value="pakistan_billing.id" selected="selected">
+                                                        <t t-esc="pakistan_billing.name"/>
+                                                    </option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group-naheed">
+                                                <label for="naheed_billing_state_id">State / Province
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <select id="naheed_billing_state_id" name="billing_state_id"
+                                                        class="form-select">
+                                                    <option value="">Please select a region, state or province</option>
+                                                    <t t-foreach="states" t-as="bs">
+                                                        <option t-att-value="bs.id">
+                                                            <t t-esc="bs.name"/>
+                                                        </option>
+                                                    </t>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group-naheed">
+                                                <label for="naheed_billing_email">Email Address
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <input id="naheed_billing_email" type="email" name="billing_email"
+                                                       class="form-control"
+                                                       placeholder="example@email.com"/>
+                                            </div>
+
+                                            <div class="form-group-naheed">
+                                                <label for="naheed_billing_zip">Zip Code (Optional)</label>
+                                                <input id="naheed_billing_zip" type="text" name="billing_zip"
+                                                       class="form-control"
+                                                       placeholder="Optional"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Card 2: Shipping Method -->
+                                    <div class="naheed-card">
+                                        <h3 class="card-title-head">Shipping Method</h3>
+                                        <div class="shipping-methods-list">
+                                            <t t-if="delivery_methods">
+                                                <t t-foreach="delivery_methods" t-as="dm">
+                                                    <label t-attf-class="naheed-option-card #{'active' if order.carrier_id.id == dm.id else ''}">
+                                                        <div class="option-left">
+                                                            <input type="radio" name="delivery_type" t-att-value="dm.id"
+                                                                   t-att-checked="order.carrier_id.id == dm.id"
+                                                                   required="required"/>
+                                                            <span class="option-title">
+                                                                <t t-out="dm.name"/>
+                                                            </span>
+                                                        </div>
+                                                        <span class="option-price">
+                                                            <t t-if="dm.fixed_price == 0">Rs. 0</t>
+                                                            <t t-else="">
+                                                                <t t-out="dm.fixed_price"
+                                                                   t-options="{'widget': 'monetary', 'display_currency': order.currency_id}"/>
+                                                            </t>
+                                                        </span>
+                                                    </label>
+                                                </t>
+                                            </t>
+                                            <t t-else="">
+                                                <div class="text-muted p-2">No shipping methods available for the
+                                                    selected region.
+                                                </div>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ============================================================ -->
+                                <!-- COLUMN 2: PAYMENT METHOD & ORDER NOTES                      -->
+                                <!-- ============================================================ -->
+                                <div class="col-lg-4 col-md-12">
+                                    <div class="naheed-card">
+                                        <h3 class="card-title-head">Payment Method</h3>
+
+                                        <div class="payment-methods-list">
+                                            <t t-if="payment_options">
+                                                <t t-foreach="payment_options" t-as="opt">
+                                                    <label t-attf-class="naheed-option-card #{'active' if opt_first else ''}">
+                                                        <div class="option-left">
+                                                            <input type="radio" name="payment_method_code"
+                                                                   t-att-value="opt['code'] or opt['id']"
+                                                                   t-att-data-provider-id="opt['provider_id']"
+                                                                   t-att-data-payment-method-id="opt.get('payment_method_id') or ''"
+                                                                   t-att-data-provider-code="opt.get('provider_code') or ''"
+                                                                   required="required"/>
+                                                            <span class="option-title">
+                                                                <t t-out="opt['name']"/>
+                                                            </span>
+                                                        </div>
+                                                        <span t-attf-class="#{opt['badge_class']}">
+                                                            <t t-if="opt.get('badge_icon')">
+                                                                <i t-attf-class="#{opt['badge_icon']} me-1"/>
+                                                            </t>
+                                                            <t t-out="opt['badge_text']"/>
+                                                        </span>
+                                                    </label>
+
+                                                    <!-- Pending message container (hidden by default) -->
+                                                    <t t-if="opt.get('pending_msg')">
+                                                        <div class="naheed-payment-info-box"
+                                                             t-att-data-for-method="opt['code'] or opt['id']"
+                                                             style="display: none;">
+                                                            <div class="d-flex align-items-start gap-2 p-3 mt-2 mb-3 rounded"
+                                                                 style="background-color: #fff9e6; border-left: 4px solid #f0ad4e;">
+                                                                <i class="fa fa-info-circle text-warning mt-1"/>
+                                                                <div class="flex-grow-1 small text-dark">
+                                                                    <t t-raw="opt['pending_msg']"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </t>
+                                                </t>
+                                            </t>
+                                            <t t-else="">
+                                                <div class="text-muted p-2">No payment methods available for the
+                                                    selected region.
+                                                </div>
+                                            </t>
+                                        </div>
+
+                                        <!-- Special Instructions Textarea -->
+                                        <div class="mt-4">
+                                            <label for="naheed_order_notes"
+                                                   class="form-label font-weight-bold text-dark">
+                                                Do you have any special instructions regarding the order?
+                                            </label>
+                                            <textarea id="naheed_order_notes" name="note" class="form-control" rows="3"
+                                                      placeholder="Write any specific delivery instructions here..."
+                                                      maxlength="300"></textarea>
+                                            <div class="text-end text-muted mt-1 small">
+                                                Remaining characters:
+                                                <span id="naheed_notes_char_counter">300</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Collapsible Accordion Actions -->
+                                        <div class="mt-4">
+                                            <button class="btn-accordion-toggle" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapse_discount">
+                                                <span>Apply Discount Code</span>
+                                                <i class="oi oi-chevron-down"/>
+                                            </button>
+                                            <div class="collapse mb-3" id="collapse_discount">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control"
+                                                           placeholder="Enter coupon code"/>
+                                                    <button class="btn btn-outline-primary" type="button">Apply</button>
+                                                </div>
+                                            </div>
+
+                                            <button class="btn-accordion-toggle" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapse_wallet">
+                                                <span>Use Wallet / Gift Card</span>
+                                                <i class="oi oi-chevron-down"/>
+                                            </button>
+                                            <div class="collapse" id="collapse_wallet">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control"
+                                                           placeholder="Enter gift card code"/>
+                                                    <button class="btn btn-outline-primary" type="button">Apply</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ============================================================ -->
+                                <!-- COLUMN 3: ORDER SUMMARY                                     -->
+                                <!-- ============================================================ -->
+                                <div class="col-lg-4 col-md-12">
+                                    <div class="naheed-card summary-card">
+                                        <h3 class="card-title-head">Order Summary</h3>
+
+                                        <!-- Collapsible Cart Items Header -->
+                                        <div class="cart-items-toggle" data-bs-toggle="collapse"
+                                             data-bs-target="#cart_items_list">
+                                            <span>
+                                                <t t-out="len(order.order_line)"/>
+                                                Item(s) in Cart
+                                            </span>
+                                            <i class="oi oi-chevron-down"/>
+                                        </div>
+
+                                        <!-- Cart Items Accordion Content -->
+                                        <div class="collapse show" id="cart_items_list">
+                                            <t t-foreach="order.order_line" t-as="line">
+                                                <div class="cart-item-row">
+                                                    <img t-att-src="website.image_url(line.product_id, 'image_128')"
+                                                         t-att-alt="line.product_id.name"/>
+                                                    <div class="item-details">
+                                                        <p class="item-title">
+                                                            <t t-out="line.product_id.name"/>
+                                                        </p>
+                                                        <span class="item-qty">Qty:
+                                                            <t t-out="int(line.product_uom_qty)"/>
+                                                        </span>
+                                                    </div>
+                                                    <span class="item-price">
+                                                        <t t-out="line.price_subtotal"
+                                                           t-options="{'widget': 'monetary', 'display_currency': order.currency_id}"/>
+                                                    </span>
+                                                </div>
+                                            </t>
+                                        </div>
+
+                                        <!-- Price Breakdown Rows -->
+                                        <div class="mt-3">
+                                            <div class="summary-row">
+                                                <span>Cart Subtotal</span>
+                                                <span class="js_summary_subtotal_amount">
+                                                    <t t-out="order.amount_untaxed"
+                                                       t-options="{'widget': 'monetary', 'display_currency': order.currency_id}"/>
+                                                </span>
+                                            </div>
+
+                                            <div class="summary-row">
+                                                <span>Shipping</span>
+                                                <div class="text-end">
+                                                    <div class="js_summary_carrier_name small text-muted">
+                                                        <t t-if="order.carrier_id">
+                                                            <t t-out="order.carrier_id.name"/>
+                                                        </t>
+                                                        <t t-else="">Select shipping method</t>
+                                                    </div>
+                                                    <span class="js_summary_shipping_amount">
+                                                        <t t-if="order.amount_delivery == 0">Rs. 0</t>
+                                                        <t t-else="">
+                                                            <t t-out="order.amount_delivery"
+                                                               t-options="{'widget': 'monetary', 'display_currency': order.currency_id}"/>
+                                                        </t>
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <t t-if="order.amount_tax > 0">
+                                                <div class="summary-row">
+                                                    <span>Tax</span>
+                                                    <span class="js_summary_tax_amount">
+                                                        <t t-out="order.amount_tax"
+                                                           t-options="{'widget': 'monetary', 'display_currency': order.currency_id}"/>
+                                                    </span>
+                                                </div>
+                                            </t>
+
+                                            <div class="summary-row total-row">
+                                                <span>Order Total</span>
+                                                <span class="total-amount js_summary_total_amount">
+                                                    <t t-out="order.amount_total"
+                                                       t-options="{'widget': 'monetary', 'display_currency': order.currency_id}"/>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Action Button -->
+                                        <button type="button" class="btn btn-complete-order js_btn_complete_order">
+                                            Complete Order
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+    </template>
+</odoo>

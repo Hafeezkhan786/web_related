@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_template_form_view_inherit_website_auto_add" model="ir.ui.view">
+        <field name="name">product.template.form.inherit.website.auto.add</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="website_sale.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='upsell']" position="inside">
+                <field name="website_auto_add_product_ids" widget="many2many_tags" 
+                       domain="[('sale_ok', '=', True), ('type', '!=', 'service')]"
+                       invisible="not sale_ok"
+                       placeholder="Automatically added to cart with this product"/>
+                <field name="website_auto_add_pkg_qty" 
+                       invisible="not sale_ok"
+                       placeholder="e.g. 5"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
